@@ -31,7 +31,7 @@ jobs:
       - name: Add data to userColl collection
         run: |
           container_id=$(docker ps -q --filter ancestor=mongo:latest)
-          sleep 5  
+          sleep 10  
           if ! docker exec -i "$container_id" \
           mongoimport --collection=User --db=WMS --file=/data/WMS.User.json; then
             echo "Errore durante l'importazione, interrompiamo lo script"
