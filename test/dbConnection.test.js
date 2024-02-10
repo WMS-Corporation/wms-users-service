@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 const { connectDB, collections } = require('../src/config/dbConnection');
 const path = require('path');
+const fs = require('fs');
 
 describe('Database Connection', () => {
     let connection;
