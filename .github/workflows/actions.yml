@@ -46,6 +46,11 @@ jobs:
         run: npm install
       - name: Run Tests
         run: npm test
+      - name: Stop and Remove MongoDB Docker Container
+        run: |
+          container_id=$(docker ps -q --filter ancestor=mongo:latest)
+          docker stop "$container_id"
+          docker rm "$container_id"
       
 
   sonarCloudCheck:
