@@ -7,9 +7,16 @@ describe('Database Connection', () => {
     let usersCollection;
 
     beforeAll(async () => {
-        connection = await MongoClient.connect('mongodb://127.0.0.1:27017');
-        db = connection.db('WMS');
-        usersCollection = db.collection('User');
+        connection = await MongoClient.connect(process.env.DB_CONN_STRING);
+        db = connection.db(process.env.DB_NAME);
+        
+        await db.createCollection(process.env.USER_COLLECTION);
+        
+        usersCollection = db.collection(process.env.USER_COLLECTION);
+
+        const jsonFilePath = path.resolve(__dirname, '../Resources/MongoDB/User.json');
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        await usersCollection.insertOne(userData);
     });
 
     it('should connect to the database and collection', async () => {
