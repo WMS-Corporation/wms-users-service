@@ -30,9 +30,13 @@ jobs:
         run: sudo docker run -d -p 27017:27017 -v $(pwd)/test/Resources/MongoDB:/data mongo:latest
       - name: Add data to userColl collection
         run: |
-          docker exec -i $(docker ps -q --filter ancestor=mongo:latest) \
-          sleep 5 && \
-          mongoimport --collection=User --db=WMS --file=/data/WMS.User.json
+          container_id=$(docker ps -q --filter ancestor=mongo:latest)
+          sleep 5  
+          if ! docker exec -i "$container_id" \
+          mongoimport --collection=User --db=WMS --file=/data/WMS.User.json; then
+            echo "Errore durante l'importazione, interrompiamo lo script"
+            exit 1
+          fi
         env:
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
