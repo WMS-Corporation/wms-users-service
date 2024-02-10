@@ -29,7 +29,7 @@ jobs:
       - name: Create MongoDB Docker Container
         run: sudo docker run -d -p 27017:27017 mongo:latest
       - name: Add data to userColl collection
-        run: mongoimport –collection=User –db=WMS –file=test/Resources/MongoDB/WMS.User.json
+        run: mongoimport --collection=User --db=WMS --file=test/Resources/MongoDB/WMS.User.json
         env:
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
