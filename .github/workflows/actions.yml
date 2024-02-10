@@ -34,15 +34,7 @@ jobs:
           brew install docker
           colima start
       - name: Create MongoDB Docker Container
-        run: sudo docker run -d -p 27017:27017 -v $(pwd)/test/Resources/MongoDB:/data mongo:latest
-      - name: Add data to userColl collection
-        run: |
-          container_id=$(docker ps -q --filter ancestor=mongo:latest)
-          if ! docker exec "$container_id" \
-          mongoimport --collection=User --db=WMS --file=/data/WMS.User.json; then
-            echo "Errore durante l'importazione, interrompiamo lo script"
-            exit 1
-          fi
+        run: sudo docker run -d -p 27017:27017 mongo:latest
         env:
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
