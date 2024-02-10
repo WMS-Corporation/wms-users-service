@@ -31,6 +31,7 @@ jobs:
       - name: Add data to userColl collection
         run: |
           docker exec -i $(docker ps -q --filter ancestor=mongo:latest) \
+          sleep 5 && \
           mongoimport --collection=User --db=WMS --file=/data/WMS.User.json
         env:
           DB_NAME: "WMS"
