@@ -32,7 +32,7 @@ jobs:
         run: |
           container_id=$(docker ps -q --filter ancestor=mongo:latest)
           sleep 10  
-          if ! docker exec -i "$container_id" \
+          if ! docker exec "$container_id" \
           mongoimport --collection=User --db=WMS --file=/data/WMS.User.json; then
             echo "Errore durante l'importazione, interrompiamo lo script"
             exit 1
