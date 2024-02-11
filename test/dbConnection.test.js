@@ -16,7 +16,7 @@ describe('Database Connection', () => {
         
         usersCollection = db.collection(process.env.USER_COLLECTION);
 
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/User.json');
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         await usersCollection.insertOne(userData);
     });
