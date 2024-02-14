@@ -41,8 +41,9 @@ describe('User testing', () => {
     });
 
     it('should set password correctly', () => {
-        user.password = 'newpassword123';
-        expect(user.password).toBe('newpassword123');
+        const newPassword = 'newpassword123';
+        user.password = newPassword;
+        expect(user.password).toBe(newPassword);
     });
 
     it('should set name correctly', () => {
