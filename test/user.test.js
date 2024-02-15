@@ -6,6 +6,7 @@ describe('User testing', () => {
         user = new User('000897', 'Martin0075', 'Bella', 'Martin', 'Marcolini', 'Admin');
     });
 
+
     it('should return the correct codUser', () => {
         expect(user.codUser).toBe('000897');
     });

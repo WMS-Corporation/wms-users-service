@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon index.js",
-    "coverage": "npm test -- --coverage --collectCoverageFrom=\"./*\"\n",
+    "coverage": "npm test -- --coverage --collectCoverageFrom=\"./**/*.js\" --ignore=\\\"coverage/lcov-report/*.js\\\"",
     "prepare": "husky"
   },
   "author": "",
