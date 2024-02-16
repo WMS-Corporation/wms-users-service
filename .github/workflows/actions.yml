@@ -41,6 +41,7 @@ jobs:
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
           USER_COLLECTION: "User"
+          JWT_SECRET: "secret_key"
 
       
 
@@ -66,6 +67,8 @@ jobs:
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
           USER_COLLECTION: "User"
+          JWT_SECRET: "secret_key"
+
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
