@@ -19,7 +19,7 @@ describe("verifyToken middleware", ()=>{
         await connectDB();
         let user= await collections?.users?.findOne();
 
-        console.log(user.CodUser);
+        console.log(user?.CodUser);
     });
 
 
