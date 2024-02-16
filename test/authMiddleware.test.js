@@ -17,6 +17,9 @@ const mockNext = jest.fn();
 describe("verifyToken middleware", ()=>{
     beforeAll(async () => {
         await connectDB();
+        let user= await collections.users.findOne();
+
+        console.log(user.CodUser);
     });
 
     it("should return 401 if token is not provided", async()=>{

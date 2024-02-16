@@ -10,11 +10,8 @@ async function connectDB(){
         await client.connect();
         const db = client.db(process.env.DB_NAME);
         const usersCollection = db.collection(process.env.USER_COLLECTION);
-        console.log(usersCollection.collectionName);
         collections.users= usersCollection;
-        let user= await collections.users.findOne();
 
-        console.log(user.CodUser);
         console.log(`Successfully connected to database: ${db.databaseName} and collection: ${usersCollection.collectionName}`);
     }catch (error) {
         console.error('Error during the connection to db: ', error)
