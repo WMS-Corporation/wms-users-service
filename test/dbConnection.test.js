@@ -28,7 +28,7 @@ describe('Database Connection', () => {
 
     it('should connect to the database and collection', async () => {
         await connectDB();
-
+        console.log("Num doc: ", await collections?.users?.countDocuments())
         expect(db.databaseName).toBe("WMS");
         expect(collections.users).toBeDefined();
         expect(collections.users.collectionName).toBe(usersCollection.collectionName);
