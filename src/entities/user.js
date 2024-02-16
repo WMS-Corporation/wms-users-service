@@ -8,7 +8,6 @@ class User{
         this._type = type;
     }
 
-
     get codUser() {
         return this._codUser;
     }
