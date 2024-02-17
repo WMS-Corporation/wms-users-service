@@ -2,10 +2,11 @@
 const {loginUser} = require("../src/services/userServices");
 const {connectDB} = require("../src/config/dbConnection");
 
+const password='bella';
 const mockReq = {
     body: {
         username: 'Martin0075',
-        password: 'bella'
+        password: password
     }
 };
 const mockRes = {
@@ -27,7 +28,7 @@ describe('loginUser services testing', () => {
     });
 
     it('should return 401 if login credentials are invalid', async () => {
-        mockReq.body={ username: 'Martin0077', password: 'Bella'}
+        mockReq.body={ username: 'Martin0077', password: password}
 
         await loginUser(mockReq, mockRes);
 

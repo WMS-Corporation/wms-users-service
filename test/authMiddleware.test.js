@@ -40,7 +40,6 @@ describe("verifyToken middleware", ()=>{
             expect(mockReq.user.Name).toEqual("Martin");
         });
 
-        //await new Promise(resolve => setTimeout(resolve, 100));
 
 
     })
