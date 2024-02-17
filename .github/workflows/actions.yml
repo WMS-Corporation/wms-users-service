@@ -42,6 +42,7 @@ jobs:
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
           USER_COLLECTION: "User"
           JWT_SECRET: "secret_key"
+          PASSWORD_USER_TEST: "bella"
 
       
 
@@ -68,6 +69,7 @@ jobs:
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
           USER_COLLECTION: "User"
           JWT_SECRET: "secret_key"
+          PASSWORD_USER_TEST: "bella"
 
 
       - name: SonarCloud Scan

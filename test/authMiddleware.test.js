@@ -1,8 +1,6 @@
 const {verifyToken} = require("../src/routes/authMiddleware");
 const jwt=require("jsonwebtoken");
-const {collections, connectDB} = require("../src/config/dbConnection");
-const {MongoClient} = require("mongodb");
-const {User} = require("../src/entities/user");
+const {connectDB} = require("../src/config/dbConnection");
 
 const mockReq = {
     headers: {},
