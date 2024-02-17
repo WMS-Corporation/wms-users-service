@@ -17,9 +17,6 @@ const mockNext = jest.fn();
 describe("verifyToken middleware", ()=>{
     beforeAll(async () => {
         await connectDB();
-        // let user= await collections?.users?.findOne();
-        // console.log("CodUser: ",user?.CodUser);
-        //console.log("Num doc: ", await collections?.users?.countDocuments())
     });
 
 
