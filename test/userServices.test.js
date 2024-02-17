@@ -3,8 +3,8 @@ const {loginUser} = require("../src/services/userServices");
 const {connectDB} = require("../src/config/dbConnection");
 
 dotenv.config();
-//const password=process.env.PASSWORD_USER_TEST;
-const password='bella';
+const password=process.env.PASSWORD_USER_TEST;
+//const password='bella';
 const mockReq = {
     body: {
         username: 'Martin0075',
