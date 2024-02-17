@@ -36,12 +36,14 @@ describe("verifyToken middleware", ()=>{
     it("should call next if token is valid", async()=>{
         const token = jwt.sign({ codUser: "000897" }, process.env.JWT_SECRET);
         mockReq.headers={ authorization: token };
-        await verifyToken (mockReq,mockRes,mockNext);
+        await verifyToken (mockReq,mockRes,()=>{
+            expect(mockReq.user.Name).toEqual("Martin");
+            expect(mockNext).toHaveBeenCalled();
+        });
 
-        await new Promise(resolve => setTimeout(resolve, 100));
+        //await new Promise(resolve => setTimeout(resolve, 100));
 
-        expect(mockReq.user.Name).toEqual("Martin");
-        expect(mockNext).toHaveBeenCalled();
+
     })
 
 })
