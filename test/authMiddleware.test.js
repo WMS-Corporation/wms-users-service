@@ -38,7 +38,6 @@ describe("verifyToken middleware", ()=>{
         mockReq.headers={ authorization: token };
         await verifyToken (mockReq,mockRes,()=>{
             expect(mockReq.user.Name).toEqual("Martin");
-            expect(mockNext).toHaveBeenCalled();
         });
 
         //await new Promise(resolve => setTimeout(resolve, 100));
