@@ -35,7 +35,7 @@ describe('loginUser services testing', () => {
         await loginUser(mockReq, mockRes);
 
         expect(mockRes.status).toHaveBeenCalledWith(401);
-        expect(mockRes.json).toHaveBeenCalledWith({ message: 'Invalid email or password ${username}' });
+        expect(mockRes.json).toHaveBeenCalledWith({ message: 'Invalid email or password' });
     });
 
 });
