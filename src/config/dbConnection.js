@@ -1,10 +1,10 @@
 const MongoClient = require('mongodb').MongoClient;
 const dotenv = require('dotenv');
 
+dotenv.config();
 
 const collections={};
 async function connectDB(){
-    dotenv.config();
     try{
         const client = new MongoClient(process.env.DB_CONN_STRING);
         await client.connect();
