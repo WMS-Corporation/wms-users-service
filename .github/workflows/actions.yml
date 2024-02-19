@@ -42,6 +42,12 @@ jobs:
           echo "USER_COLLECTION: $USER_COLLECTION"
           echo "JWT_SECRET: $JWT_SECRET"
           echo "PASSWORD_USER_TEST: $PASSWORD_USER_TEST"
+        env:
+          DB_NAME: "WMS"
+          DB_CONN_STRING: "mongodb://127.0.0.1:27017"
+          USER_COLLECTION: "User"
+          JWT_SECRET: "secret_key"
+          PASSWORD_USER_TEST: "bella"
       - name: Run Tests
         run: npm test
         env:
