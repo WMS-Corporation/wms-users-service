@@ -1,6 +1,5 @@
 const express = require('express');
 const cors= require('cors');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const {connectDB} = require("./src/config/dbConnection");
 const router= require('./src/routes/route');
 const dotenv = require('dotenv');
