@@ -43,6 +43,7 @@ jobs:
           USER_COLLECTION: "User"
           JWT_SECRET: "secret_key"
           PASSWORD_USER_TEST: "bella"
+          PORT: 3000
 
       
 
@@ -70,6 +71,7 @@ jobs:
           USER_COLLECTION: "User"
           JWT_SECRET: "secret_key"
           PASSWORD_USER_TEST: "bella"
+          PORT: 3000
 
 
       - name: SonarCloud Scan
