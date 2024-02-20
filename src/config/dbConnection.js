@@ -24,7 +24,7 @@ async function connectDB() {
 // Funzione per disconnettere il client
 async function disconnectDB() {
     try {
-        if (client !== null && client.isConnected()) {
+        if (client !== null) {
             await client.close();
             console.log('Disconnected from the database');
         } else {
