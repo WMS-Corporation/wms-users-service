@@ -1,9 +1,13 @@
 const {findUserByUsername} = require("../src/repositories/userRepository");
-const {connectDB} = require("../src/config/dbConnection");
+const {connectDB, disconnectDB} = require("../src/config/dbConnection");
 
 describe('userRepository testing', () => {
     beforeAll(async () => {
         await connectDB();
+    });
+    afterAll(async () => {
+        // Closing the DB connection allows Jest to exit successfully.
+        await disconnectDB();
     });
 
     it('should find a user by username', async () => {
