@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watchAll --detectOpenHandles",
     "start": "nodemon index.js",
     "coverage": "npm test -- --coverage --collectCoverageFrom=\"./**/*.js\" --ignore=\\\"coverage/lcov-report/*.js\\\"",
     "prepare": "husky"
