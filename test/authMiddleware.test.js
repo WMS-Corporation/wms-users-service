@@ -13,7 +13,7 @@ describe("verifyToken middleware", ()=>{
     it("should return 401 if token is not provided", async()=>{
         const mockReq = {
             headers: {},
-            user: {}
+            user: null
         };
         const mockRes = {
             status: jest.fn().mockReturnThis(),// Mock method to simulate HTTP response status
@@ -28,7 +28,7 @@ describe("verifyToken middleware", ()=>{
     it("should return 401 if token is invalid", async()=>{
         const mockReq = {
             headers: {},
-            user: {}
+            user: null
         };
         const mockRes = {
             status: jest.fn().mockReturnThis(),// Mock method to simulate HTTP response status
@@ -44,7 +44,7 @@ describe("verifyToken middleware", ()=>{
     it("should call next if token is valid", async()=>{
         const mockReq = {
             headers: {},
-            user: {}
+            user: null
         };
         const mockRes = {
             status: jest.fn().mockReturnThis(),// Mock method to simulate HTTP response status
