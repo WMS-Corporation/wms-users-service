@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const {loginUser} = require("../src/services/userServices");
-const {connectDB} = require("../src/config/dbConnection");
+const {connectDB, disconnectDB} = require("../src/config/dbConnection");
 
 dotenv.config();
 const password=process.env.PASSWORD_USER_TEST;
@@ -21,8 +21,12 @@ describe('loginUser services testing', () => {
 
     beforeEach(async () => {
         await connectDB();
-        jest.clearAllMocks();
     });
+
+    afterEach(async () => {
+        jest.clearAllMocks();
+        await disconnectDB();
+    })
 
     it('should return 200 and user data if login is successful', async () => {
         const res=mockResponse()
