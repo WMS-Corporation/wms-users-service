@@ -7,7 +7,7 @@ const {findUserByUsername} = require("../repositories/userRepository");
 
 const loginUser= asyncHandler(async(req, res) =>{
     const {username, password}=req.body;
-
+    console.log(username,", ", password)
     try{
         const userData= await findUserByUsername(username);
         if(userData){
