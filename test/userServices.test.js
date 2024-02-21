@@ -5,15 +5,19 @@ const {connectDB} = require("../src/config/dbConnection");
 dotenv.config();
 const password=process.env.PASSWORD_USER_TEST;
 //const password='bella';
-const mockReq = {
-    body: {
-        username: 'Martin0075',
-        password: password
-    }
-};
-const mockRes = {
-    status: jest.fn(() => mockRes),
-    json: jest.fn()
+
+// const mockRes = {
+//     status: jest.fn(() => mockRes),
+//     json: jest.fn()
+// };
+const mockResponse = () => {
+    const res = {
+        json: {},
+        status: {}
+    };
+    res.status = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockReturnValue(res);
+    return res;
 };
 
 describe('loginUser services testing', () => {
@@ -23,19 +27,32 @@ describe('loginUser services testing', () => {
     });
 
     it('should return 200 and user data if login is successful', async () => {
-        await loginUser(mockReq, mockRes);
+        const res=mockResponse()
+        const mockReq = {
+            body: {
+                username: 'Martin0075',
+                password: password
+            }
+        };
+        await loginUser(mockReq, res);
 
-        expect(mockRes.status).toHaveBeenCalledWith(200);
-        expect(mockRes.json).toHaveBeenCalledWith({ message: 'Login successful', user: expect.any(Object) });
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ message: 'Login successful', user: expect.any(Object) });
     });
 
     it('should return 401 if login credentials are invalid', async () => {
-        mockReq.body={ username: 'Martin0077', password: password}
+        const res=mockResponse()
+        const mockReq = {
+            body: {
+                username: 'Martin0077',
+                password: password
+            }
+        };
 
-        await loginUser(mockReq, mockRes);
+        await loginUser(mockReq, res);
 
-        expect(mockRes.status).toHaveBeenCalledWith(401);
-        expect(mockRes.json).toHaveBeenCalledWith({ message: 'Invalid email or password' });
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({ message: 'Invalid email or password' });
     });
 
 });
