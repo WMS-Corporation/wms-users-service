@@ -11,10 +11,7 @@ const password=process.env.PASSWORD_USER_TEST;
 //     json: jest.fn()
 // };
 const mockResponse = () => {
-    const res = {
-        json: {},
-        status: {}
-    };
+    const res = {};
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
     return res;
@@ -34,8 +31,18 @@ describe('loginUser services testing', () => {
                 password: password
             }
         };
-        await loginUser(mockReq, res);
 
+
+        //await loginUser(mockReq, res,{});
+        await expect(loginUser(mockReq, res, {})).resolves.toBeDefined();
+        // expect(async ()=>loginUser(mockReq,res,{})).resolves.toEqual(expect.objectContaining({
+        //     message: 'Login successful',
+        //     user: expect.any(Object)
+        // }))
+        // await expect(loginUser(mockReq, res, {})).resolves.toEqual(expect.objectContaining({
+        //     message: 'Login successful',
+        //     user: expect.any(Object)
+        // }));
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({ message: 'Login successful', user: expect.any(Object) });
     });
