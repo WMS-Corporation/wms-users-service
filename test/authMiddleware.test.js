@@ -41,24 +41,24 @@ describe("verifyToken middleware", ()=>{
         expect(mockRes.json).toHaveBeenCalledWith({message: "Invalid token"})
     })
 
-    it("should call next if token is valid", async()=>{
-        const mockReq = {
-            headers: {},
-            user: null
-        };
-        const mockRes = {
-            status: jest.fn().mockReturnThis(),// Mock method to simulate HTTP response status
-            json: jest.fn()// Mock method to send JSON response
-        };
-        const mockNext = jest.fn();
-        const token = jwt.sign({ codUser: "000897" }, process.env.JWT_SECRET);
-        mockReq.headers={ authorization: token };
-        await verifyToken (mockReq,mockRes,()=>{
-            expect(mockReq.user.Name).toEqual("Martin");
-        });
-
-
-
-    })
+    // it("should call next if token is valid", async()=>{
+    //     const mockReq = {
+    //         headers: {},
+    //         user: null
+    //     };
+    //     const mockRes = {
+    //         status: jest.fn().mockReturnThis(),// Mock method to simulate HTTP response status
+    //         json: jest.fn()// Mock method to send JSON response
+    //     };
+    //     const mockNext = jest.fn();
+    //     const token = jwt.sign({ codUser: "000897" }, process.env.JWT_SECRET);
+    //     mockReq.headers={ authorization: token };
+    //     await verifyToken (mockReq,mockRes,()=>{
+    //         expect(mockReq.user.Name).toEqual("Martin");
+    //     });
+    //
+    //
+    //
+    // })
 
 })

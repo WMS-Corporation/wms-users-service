@@ -10,12 +10,15 @@ let corsOptions = {
     origin: /http:\/\/localhost:3000\/.*/
 };
 dotenv.config();
+
+const port = process.env.PORT;
+
 const app=express();
 app.disable("x-powered-by");
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(router);
-app.listen(process.env.PORT, () => console.info(`WMS-users-service is running`));
+app.listen(port, () => console.info(`WMS-users-service is running`));
 
 connectDB();
 
