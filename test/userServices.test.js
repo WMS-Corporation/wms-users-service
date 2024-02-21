@@ -19,7 +19,7 @@ const mockResponse = () => {
 
 describe('loginUser services testing', () => {
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         await connectDB();
     });
 
