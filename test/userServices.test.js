@@ -21,6 +21,7 @@ describe('loginUser services testing', () => {
 
     beforeEach(async () => {
         await connectDB();
+        jest.clearAllMocks();
     });
 
     it('should return 200 and user data if login is successful', async () => {
