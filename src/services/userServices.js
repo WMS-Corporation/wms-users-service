@@ -7,9 +7,8 @@ const {findUserByUsername} = require("../repositories/userRepository");
 
 const loginUser= asyncHandler(async(req, res) =>{
     const {username, password}=req.body;
-    console.log(username,", ", password)
     const userData= await findUserByUsername(username);
-    console.log("username: ", userData)
+    console.log("userData: ", userData)
     if(userData){
         const crypt = await bcrypt.compare(password, userData?.Password)
         console.log("crypt: ", crypt)
