@@ -9,8 +9,10 @@ const loginUser= asyncHandler(async(req, res) =>{
     const {username, password}=req.body;
     console.log(username,", ", password)
     const userData= await findUserByUsername(username);
+    console.log("username: ", userData)
     if(userData){
         const crypt = await bcrypt.compare(password, userData?.Password)
+        console.log("crypt: ", crypt)
         if(crypt){
             const user= createUserFromData(userData);
             user.token=generateToken(user.codUser);

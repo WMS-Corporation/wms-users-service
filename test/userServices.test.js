@@ -25,6 +25,7 @@ describe('loginUser services testing', () => {
 
     afterEach(async () => {
         jest.clearAllMocks();
+        console.log("clear");
         //await disconnectDB();
     })
 
