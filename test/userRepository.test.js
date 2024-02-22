@@ -1,9 +1,21 @@
 const {findUserByUsername} = require("../src/repositories/userRepository");
-const {connectDB, disconnectDB} = require("../src/config/dbConnection");
+const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection");
+const {MongoClient} = require("mongodb");
+const path = require("path");
+const fs = require("fs");
 
 describe('userRepository testing', () => {
     beforeAll(async () => {
-        await connectDB();
+        let connection = await MongoClient.connect(process.env.DB_CONN_STRING);
+        let db = connection.db(process.env.DB_NAME);
+
+        let usersCollection = db.collection(process.env.USER_COLLECTION);
+
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        await usersCollection.insertOne(userData);
+        collections.users=usersCollection;
+        //connectDB();
     });
     // afterAll(async () => {
     //     // Closing the DB connection allows Jest to exit successfully.

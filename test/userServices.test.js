@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const {loginUser} = require("../src/services/userServices");
-const {connectDB, disconnectDB} = require("../src/config/dbConnection");
+const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection");
 const {MongoClient} = require("mongodb");
 const path = require("path");
 const fs = require("fs");
@@ -22,17 +22,7 @@ const mockResponse = () => {
 
 describe('loginUser services testing', () => {
 
-    // beforeEach(async () => {
-    //     await connectDB();
-    // });
-
-    // let connection;
-    // let db;
-    // let usersCollection;
-
-
     beforeAll(async () => {
-        await connectDB();
         let connection = await MongoClient.connect(process.env.DB_CONN_STRING);
         let db = connection.db(process.env.DB_NAME);
 
@@ -41,13 +31,9 @@ describe('loginUser services testing', () => {
         const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         await usersCollection.insertOne(userData);
+        collections.users=usersCollection;
+        //connectDB();
     });
-
-    // afterEach(async () => {
-    //     jest.clearAllMocks();
-    //     console.log("clear");
-    //     //await disconnectDB();
-    // })
 
     it('should return 200 and user data if login is successful', async () => {
         const res=mockResponse()
