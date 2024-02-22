@@ -21,7 +21,6 @@ describe("verifyToken middleware", ()=>{
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         await usersCollection.insertOne(userData);
         collections.users=usersCollection;
-        //connectDB();
     });
 
 

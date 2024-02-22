@@ -15,12 +15,7 @@ describe('userRepository testing', () => {
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         await usersCollection.insertOne(userData);
         collections.users=usersCollection;
-        //connectDB();
     });
-    // afterAll(async () => {
-    //     // Closing the DB connection allows Jest to exit successfully.
-    //     await disconnectDB();
-    // });
 
     it('should find a user by username', async () => {
         const username = 'Martin0075';

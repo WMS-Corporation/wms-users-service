@@ -7,12 +7,6 @@ const fs = require("fs");
 
 dotenv.config();
 const password=process.env.PASSWORD_USER_TEST;
-//const password='bella';
-
-// const mockRes = {
-//     status: jest.fn(() => mockRes),
-//     json: jest.fn()
-// };
 const mockResponse = () => {
     const res = {};
     res.status = jest.fn().mockReturnValue(res);
@@ -32,7 +26,6 @@ describe('loginUser services testing', () => {
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         await usersCollection.insertOne(userData);
         collections.users=usersCollection;
-        //connectDB();
     });
 
     it('should return 200 and user data if login is successful', async () => {
