@@ -12,16 +12,15 @@ const mockRes = {
 
 describe("verifyToken middleware", ()=>{
     beforeAll(async () => {
-        // let connection = await MongoClient.connect(process.env.DB_CONN_STRING);
-        // let db = connection.db(process.env.DB_NAME);
-        //
-        // let usersCollection = db.collection(process.env.USER_COLLECTION);
-        //
-        // const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
-        // const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-        // await usersCollection.insertOne(userData);
-        // collections.users=usersCollection;
-        await connectDB()
+        let connection = await MongoClient.connect(process.env.DB_CONN_STRING);
+        let db = connection.db(process.env.DB_NAME);
+
+        let usersCollection = db.collection(process.env.USER_COLLECTION);
+
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        await usersCollection.insertOne(userData);
+        collections.users=usersCollection;
     });
 
 
