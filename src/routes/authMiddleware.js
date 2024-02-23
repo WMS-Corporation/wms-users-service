@@ -26,7 +26,7 @@ const verifyToken= asyncHandler(async(req, res, next) =>{
         if (err) {
             return res.status(401).json({message: "Invalid token"});
         }
-        req.user = await collections?.users?.findOne({CodUser: decoded.codUser});
+        req.user = await collections?.users?.findOne({_codUser: decoded.codUser});
         next();
     })
 } )

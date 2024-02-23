@@ -6,6 +6,13 @@ dotenv.config();
 const collections={};
 let client = null;
 
+/**
+ * Connects to the database.
+ *
+ * This function establishes a connection to the MongoDB database using the connection string
+ * specified in the environment variables. It initializes the MongoDB client, connects to the
+ * database, and sets up the users collection for further database operations.
+ */
 async function connectDB() {
     try {
         client = new MongoClient(process.env.DB_CONN_STRING);
@@ -21,7 +28,12 @@ async function connectDB() {
     }
 }
 
-// Funzione per disconnettere il client
+/**
+ * Disconnects from the database.
+ *
+ * This function closes the connection to the MongoDB database.
+ * If the client is not connected, it logs a message indicating that it's not connected.
+ */
 async function disconnectDB() {
     try {
         if (client !== null) {

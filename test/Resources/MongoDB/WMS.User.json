@@ -1,8 +1,8 @@
 {
-  "CodUser": "000897",
-  "Username": "Martin0075",
-  "Password": "$2y$10$mrpe.j2q/FaYrm9FBI/DfuFZMqiXRdLPkK0jHBFkJKAms2BVZwF12",
-  "Name": "Martin",
-  "Surname": "Marcolini",
-  "Type": "Admin"
+  "_codUser": "000897",
+  "_username": "Martin0075",
+  "_password": "$2y$10$mrpe.j2q/FaYrm9FBI/DfuFZMqiXRdLPkK0jHBFkJKAms2BVZwF12",
+  "_name": "Martin",
+  "_surname": "Marcolini",
+  "_type": "Admin"
 }

@@ -1,22 +1,13 @@
 class User{
-    constructor(codUser, username, password, name, surname, type, token) {
-        this._codUser = codUser;
-        this._username = username;
-        this._password = password;
-        this._name = name;
-        this._surname = surname;
-        this._type = type;
-        this._token= token
+    constructor(codUser, username, password, name, surname, type) {
+        this._codUser = codUser
+        this._username = username
+        this._password = password
+        this._name = name
+        this._surname = surname
+        this._type = type
     }
 
-
-    set token(value) {
-        this._token = value;
-    }
-
-    get token() {
-        return this._token;
-    }
 
     get codUser() {
         return this._codUser;

@@ -3,15 +3,16 @@ const {connectDB, disconnectDB, collections} = require("../src/config/dbConnecti
 const {MongoClient} = require("mongodb");
 const path = require("path");
 const fs = require("fs");
+const {User} = require("../src/entities/user");
 
 const username = 'Pietro0096'
 const expectedUser = {
-    "CodUser": "000867",
-    "Username": username,
-    "Password": "$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW",
-    "Name": "Pietro",
-    "Surname": "Lelli",
-    "Type": "Operational"
+    "_codUser": "000867",
+    "_username": username,
+    "_password": "$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW",
+    "_name": "Pietro",
+    "_surname": "Lelli",
+    "_type": "Operational"
 };
 
 describe('userRepository testing', () => {
@@ -20,7 +21,7 @@ describe('userRepository testing', () => {
     });
 
     it("should create a new user",async () =>{
-        const result=await createUser(expectedUser)
+        const result=await createUser(new User("000867",username,"$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW","Pietro","Lelli","Operational"))
         expect(result).toBeDefined()
     })
 
