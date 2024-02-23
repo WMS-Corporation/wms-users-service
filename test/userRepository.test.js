@@ -1,34 +1,31 @@
-const {findUserByUsername} = require("../src/repositories/userRepository");
+const {findUserByUsername, createUser} = require("../src/repositories/userRepository");
 const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection");
 const {MongoClient} = require("mongodb");
 const path = require("path");
 const fs = require("fs");
 
+const username = 'Pietro0096'
+const expectedUser = {
+    "CodUser": "000867",
+    "Username": username,
+    "Password": "$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW",
+    "Name": "Pietro",
+    "Surname": "Lelli",
+    "Type": "Operational"
+};
+
 describe('userRepository testing', () => {
     beforeAll(async () => {
-        let connection = await MongoClient.connect(process.env.DB_CONN_STRING);
-        let db = connection.db(process.env.DB_NAME);
-
-        let usersCollection = db.collection(process.env.USER_COLLECTION);
-
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-        await usersCollection.insertOne(userData);
-        collections.users=usersCollection;
+        await connectDB()
     });
 
-    it('should find a user by username', async () => {
-        const username = 'Martin0075';
-        const expectedUser = {
-            "CodUser": "000897",
-            "Username": username,
-            "Password": "$2y$10$mrpe.j2q/FaYrm9FBI/DfuFZMqiXRdLPkK0jHBFkJKAms2BVZwF12",
-            "Name": "Martin",
-            "Surname": "Marcolini",
-            "Type": "Admin"
-        };
-        const user = await findUserByUsername(username);
+    it("should create a new user",async () =>{
+        const result=await createUser(expectedUser)
+        expect(result).toBeDefined()
+    })
 
+    it('should find a user by username', async () => {
+        const user = await findUserByUsername(username);
         expect(user).toEqual(expect.objectContaining(expectedUser));
     });
 
