@@ -50,7 +50,7 @@ describe('loginUser services testing', () => {
             body: {
                 _codUser: "000866",
                 _username: username,
-                _password: "ciao",
+                _password: password,
                 _name: "Michele",
                 _surname: "Laddaga",
                 _type: "Operational"
@@ -70,7 +70,7 @@ describe('loginUser services testing', () => {
             body: {
                 _codUser: "000897",
                 _username: username,
-                _password: "ciao",
+                _password: password,
                 _name: "Michele",
                 _surname: "Laddaga",
                 _type: "Operational"
