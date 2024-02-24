@@ -9,7 +9,7 @@ const {User} = require("../entities/user");
  * @returns {User} The created user object.
  */
 function createUserFromData(userData) {
-    return new User(userData.CodUser, userData.Username, userData.Password, userData.Name, userData.Surname, userData.Type);
+    return new User(userData._codUser, userData._username, userData._password, userData._name, userData._surname, userData._type);
 }
 
 module.exports={createUserFromData}

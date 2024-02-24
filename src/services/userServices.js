@@ -56,10 +56,10 @@ const registerUser=asyncHandler(async(req,res) =>{
  * @param {Object} res - The response object.
  */
 const loginUser= asyncHandler(async(req, res) =>{
-    const {Username, Password}=req.body
-    const userData= await findUserByUsername(Username)
+    const {_username, _password}=req.body
+    const userData= await findUserByUsername(_username)
     if(userData){
-        const crypt = await bcrypt.compare(Password, userData._password)
+        const crypt = await bcrypt.compare(_password, userData._password)
         if(crypt){
             const user= createUserFromData(userData)
             console.log("Login successful")

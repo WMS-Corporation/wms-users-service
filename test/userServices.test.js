@@ -28,12 +28,12 @@ describe('loginUser services testing', () => {
         const username = 'Michele0096'
         const mockReq = {
             body: {
-                CodUser: "000866",
-                Username: username,
-                Password: "",
-                Name: "",
-                Surname: "",
-                Type: ""
+                _codUser: "000866",
+                _username: username,
+                _password: "",
+                _name: "",
+                _surname: "",
+                _type: ""
             }
         };
 
@@ -48,12 +48,12 @@ describe('loginUser services testing', () => {
         const username = 'Michele0096'
         const mockReq = {
             body: {
-                CodUser: "000866",
-                Username: username,
-                Password: "ciao",
-                Name: "Michele",
-                Surname: "Laddaga",
-                Type: "Operational"
+                _codUser: "000866",
+                _username: username,
+                _password: "ciao",
+                _name: "Michele",
+                _surname: "Laddaga",
+                _type: "Operational"
             }
         };
 
@@ -68,12 +68,12 @@ describe('loginUser services testing', () => {
         const username = 'Martin0075'
         const mockReq = {
             body: {
-                CodUser: "000897",
-                Username: username,
-                Password: "ciao",
-                Name: "Michele",
-                Surname: "Laddaga",
-                Type: "Operational"
+                _codUser: "000897",
+                _username: username,
+                _password: "ciao",
+                _name: "Michele",
+                _surname: "Laddaga",
+                _type: "Operational"
             }
         };
 
@@ -87,8 +87,8 @@ describe('loginUser services testing', () => {
         const res=mockResponse()
         const mockReq = {
             body: {
-                Username: 'Martin0075',
-                Password: password
+                _username: 'Martin0075',
+                _password: password
             }
         };
         await loginUser(mockReq, res)
@@ -100,8 +100,8 @@ describe('loginUser services testing', () => {
         const res=mockResponse()
         const mockReq = {
             body: {
-                Username: 'Martin0077',
-                Password: password
+                _username: 'Martin0077',
+                _password: password
             }
         };
 
