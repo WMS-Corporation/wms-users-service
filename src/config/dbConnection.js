@@ -28,27 +28,9 @@ async function connectDB() {
     }
 }
 
-/**
- * Disconnects from the database.
- *
- * This function closes the connection to the MongoDB database.
- * If the client is not connected, it logs a message indicating that it's not connected.
- */
-async function disconnectDB() {
-    try {
-        if (client !== null) {
-            await client.close();
-            console.log('Disconnected from the database');
-        } else {
-            console.log('Not connected to the database');
-        }
-    } catch (error) {
-        console.error('Error during disconnection from the database: ', error);
-    }
-}
+
 
 module.exports = {
     connectDB,
-    disconnectDB,
     collections
 };
