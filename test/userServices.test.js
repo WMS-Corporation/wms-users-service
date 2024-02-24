@@ -18,6 +18,9 @@ describe('loginUser services testing', () => {
 
     beforeAll(async () => {
         await connectDB()
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        collections.users.insertOne(userData)
     });
 
     it('should return 401 if the data are invalid', async () => {
@@ -62,10 +65,10 @@ describe('loginUser services testing', () => {
 
     it('should return 401 if the user already exists', async () => {
         const res=mockResponse()
-        const username = 'Michele0096'
+        const username = 'Martin0075'
         const mockReq = {
             body: {
-                CodUser: "000866",
+                CodUser: "000897",
                 Username: username,
                 Password: "ciao",
                 Name: "Michele",
@@ -84,7 +87,7 @@ describe('loginUser services testing', () => {
         const res=mockResponse()
         const mockReq = {
             body: {
-                Username: 'Michele0096',
+                Username: 'Martin0075',
                 Password: password
             }
         };
