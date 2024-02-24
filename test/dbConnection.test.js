@@ -14,7 +14,6 @@ describe('Database Connection', () => {
     beforeAll(async () => {
         connection = await MongoClient.connect(process.env.DB_CONN_STRING);
         db = connection.db(process.env.DB_NAME);
-        
         usersCollection = db.collection(process.env.USER_COLLECTION);
     });
 

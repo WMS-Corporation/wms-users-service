@@ -1,14 +1,14 @@
-const {findUserByUsername, createUser} = require("../src/repositories/userRepository");
-const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection");
-const {User} = require("../src/entities/user");
-const path = require("path");
-const fs = require("fs");
+const {findUserByUsername, createUser} = require("../src/repositories/userRepository")
+const {connectDB, collections} = require("../src/config/dbConnection")
+const {User} = require("../src/entities/user")
+const path = require("path")
+const fs = require("fs")
 
 describe('userRepository testing', () => {
     beforeAll(async () => {
         await connectDB()
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
         collections.users.insertOne(userData)
     });
 
@@ -18,16 +18,16 @@ describe('userRepository testing', () => {
     })
 
     it('should find a user by username', async () => {
-        const user = await findUserByUsername("Martin0075");
-        expect(user._name).toEqual("Martin");
-        expect(user._surname).toEqual("Marcolini");
+        const user = await findUserByUsername("Martin0075")
+        expect(user._name).toEqual("Martin")
+        expect(user._surname).toEqual("Marcolini")
     });
 
     it('should return null if user is not found', async () => {
-        const username = 'nonexistentuser';
-        const user = await findUserByUsername(username);
+        const username = 'nonexistentuser'
+        const user = await findUserByUsername(username)
 
-        expect(user).toBeNull();
+        expect(user).toBeNull()
     });
 
 });

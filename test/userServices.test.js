@@ -1,25 +1,25 @@
-const dotenv = require('dotenv');
-const {loginUser, registerUser} = require("../src/services/userServices");
-const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection");
-const {MongoClient} = require("mongodb");
-const path = require("path");
-const fs = require("fs");
+const dotenv = require('dotenv')
+const {loginUser, registerUser} = require("../src/services/userServices")
+const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection")
+const {MongoClient} = require("mongodb")
+const path = require("path")
+const fs = require("fs")
 
-dotenv.config();
-const password=process.env.PASSWORD_USER_TEST;
+dotenv.config()
+const password=process.env.PASSWORD_USER_TEST
 const mockResponse = () => {
-    const res = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    return res;
+    const res = {}
+    res.status = jest.fn().mockReturnValue(res)
+    res.json = jest.fn().mockReturnValue(res)
+    return res
 };
 
 describe('loginUser services testing', () => {
 
     beforeAll(async () => {
         await connectDB()
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
         collections.users.insertOne(userData)
     });
 
@@ -37,10 +37,10 @@ describe('loginUser services testing', () => {
             }
         };
 
-        await registerUser(mockReq, res);
+        await registerUser(mockReq, res)
 
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Invalid user data'});
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({ message: 'Invalid user data'})
     });
 
     it('should return 200 and user data if registration is successful', async () => {
@@ -57,10 +57,10 @@ describe('loginUser services testing', () => {
             }
         };
 
-        await registerUser(mockReq, res);
+        await registerUser(mockReq, res)
 
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Registration successful', user: expect.any(Object), token:expect.any(String) });
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).toHaveBeenCalledWith({ message: 'Registration successful', user: expect.any(Object), token:expect.any(String) })
     });
 
     it('should return 401 if the user already exists', async () => {
@@ -77,10 +77,10 @@ describe('loginUser services testing', () => {
             }
         };
 
-        await registerUser(mockReq, res);
+        await registerUser(mockReq, res)
 
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ message: 'User already exists'});
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({ message: 'User already exists'})
     });
 
     it('should return 200 and user data if login is successful', async () => {
@@ -91,9 +91,9 @@ describe('loginUser services testing', () => {
                 Password: password
             }
         };
-        await loginUser(mockReq, res);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Login successful', user: expect.any(Object), token:expect.any(String) });
+        await loginUser(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).toHaveBeenCalledWith({ message: 'Login successful', user: expect.any(Object), token:expect.any(String) })
     });
 
     it('should return 401 if login credentials are invalid', async () => {
@@ -105,10 +105,10 @@ describe('loginUser services testing', () => {
             }
         };
 
-        await loginUser(mockReq, res);
+        await loginUser(mockReq, res)
 
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Invalid email or password' });
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({ message: 'Invalid email or password' })
     });
 
 });
