@@ -4,6 +4,7 @@ const {connectDB, collections} = require("../src/config/dbConnection");
 const {MongoClient} = require("mongodb");
 const path = require("path");
 const fs = require("fs");
+const {generateToken} = require("../src/services/userServices");
 
 const mockRes = {
     status: jest.fn().mockReturnThis(),// Mock method to simulate HTTP response status
@@ -41,7 +42,8 @@ describe("verifyToken middleware", ()=>{
             user: null
         };
         const mockNext = jest.fn();
-        mockReq.headers={ authorization: "invalid_token" }
+        const token=generateToken("000899")
+        mockReq.headers={ authorization: `Bearer ${token}` }
         await verifyToken (mockReq,mockRes,mockNext)
         expect(mockRes.status).toHaveBeenCalledWith(401);
         expect(mockRes.json).toHaveBeenCalledWith({message: "Invalid token"})
@@ -52,8 +54,9 @@ describe("verifyToken middleware", ()=>{
             headers: {},
             user: null
         };
-        const token = jwt.sign({ codUser: "000897" }, process.env.JWT_SECRET);
-        mockReq.headers={ authorization: token };
+        //const token = jwt.sign({ codUser: "000897" }, process.env.JWT_SECRET);
+        const token=generateToken("000897")
+        mockReq.headers={ authorization: `Bearer ${token}` };
         await verifyToken (mockReq,mockRes,()=>{
             expect(mockReq.user._name).toEqual("Martin");
         });

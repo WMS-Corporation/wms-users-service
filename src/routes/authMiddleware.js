@@ -17,18 +17,16 @@ const dotenv = require('dotenv');
 dotenv.config()
 const verifyToken= asyncHandler(async(req, res, next) =>{
     const token=req.headers.authorization;
-
     if(!token){
         return res.status(401).json({message: "Token not provided"});
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        if (err) {
-            return res.status(401).json({message: "Invalid token"});
-        }
-        req.user = await collections?.users?.findOne({_codUser: decoded.codUser});
-        next();
-    })
+    const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+    req.user = await collections?.users?.findOne({ _codUser: decoded.id });
+    if (!req.user) {
+        return res.status(401).json({message: "Invalid token"});
+    }
+    next();
 } )
 
 module.exports={verifyToken};
