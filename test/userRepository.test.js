@@ -1,4 +1,4 @@
-const {findUserByUsername, createUser, getUsers} = require("../src/repositories/userRepository")
+const {findUserByUsername, createUser, getUsers, findUserByCode} = require("../src/repositories/userRepository")
 const {connectDB, collections} = require("../src/config/dbConnection")
 const {User} = require("../src/entities/user")
 const path = require("path")
@@ -32,9 +32,22 @@ describe('userRepository testing', () => {
 
     it('should return all the users', async() => {
         const result= await getUsers()
-        console.log(collections.users.countDocuments())
         expect(result.length).toEqual(await collections.users.countDocuments())
     })
+
+    it('should return a user by userCode', async() =>{
+        const userCode = "000897"
+        const user = await findUserByCode(userCode)
+        expect(user._name).toEqual("Martin")
+        expect(user._surname).toEqual("Marcolini")
+    })
+
+    it('Should return null if there is no user with the specified user code', async () => {
+        const userCode = '000965'
+        const user = await findUserByCode(userCode)
+
+        expect(user).toBeNull()
+    });
 
 
 });

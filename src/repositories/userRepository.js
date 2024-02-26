@@ -31,11 +31,26 @@ const createUser = asyncHandler(async (user) => {
     }
 });
 
+/**
+ * Retrieves all users.
+ *
+ * This function handles the retrieval of all users from the database.
+ *
+ * @returns {Array|null} An array containing user data if retrieval is successful, otherwise null.
+ */
 const getUsers = asyncHandler(async () => {
     const result = await collections?.users?.find().toArray();
     return result
 })
 
+/**
+ * Finds a user by user code.
+ *
+ * This function handles the retrieval of a user based on the provided user code.
+ *
+ * @param {string} codUser - The user code to search for.
+ * @returns {Object|null} The user data if found, otherwise null.
+ */
 const findUserByCode = asyncHandler(async (codUser) => {
     return await collections?.users?.findOne({ _codUser: codUser })
 });

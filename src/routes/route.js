@@ -1,5 +1,5 @@
 const express = require('express');
-const {loginUser, registerUser, getMe, getAll} = require("../services/userServices");
+const {loginUser, registerUser, getMe, getAll, getUserByCode} = require("../services/userServices");
 const {verifyToken} = require("./authMiddleware");
 const router = express.Router();
 
@@ -8,7 +8,8 @@ router.get('/', (req, res) => {
 })
 router.post('/register', registerUser)
 router.post('/login', loginUser);
-router.get("/getMe", verifyToken, getMe)
-router.get("/getAll", getAll)
+router.get("/me", verifyToken, getMe)
+router.get("/all", getAll)
+router.get("/:codUser", getUserByCode)
 
 module.exports = router;

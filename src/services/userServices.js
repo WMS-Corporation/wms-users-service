@@ -81,10 +81,32 @@ const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 
+/**
+ * Retrieves user information.
+ *
+ * This function handles the retrieval of user information.
+ * It returns the user data for the currently logged-in user.
+ *
+ * @param {Object} req - The request object containing the user session information.
+ * @param {Object} res - The response object.
+ * @returns {Object} The HTTP response with the user data in JSON format.
+ */
 const getMe = asyncHandler(async(req, res) => {
     return res.status(200).json(req.user)
 })
 
+/**
+ * Retrieves all users.
+ *
+ * This function handles the retrieval of all users from the database.
+ * It calls the getUsers function to fetch the user data.
+ * If the retrieval is successful, it returns the user data with HTTP status code 200 (OK).
+ * If the retrieval fails (e.g., invalid user data), it returns an error message with HTTP status code 401 (Unauthorized).
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} The HTTP response containing either the user data or an error message in JSON format.
+ */
 const getAll = asyncHandler(async(req, res) => {
     const result = await getUsers()
     if(result){
@@ -94,6 +116,20 @@ const getAll = asyncHandler(async(req, res) => {
     }
 })
 
+/**
+ * Retrieves user by user code.
+ *
+ * This function handles the retrieval of a user based on the provided user code.
+ * It extracts the user code from the request parameters.
+ * If the user code is provided, it calls the findUserByCode function to search for the user in the database.
+ * If the user is found, it returns the user data with HTTP status code 200 (OK).
+ * If the user is not found, it returns an error message with HTTP status code 401 (Unauthorized).
+ * If the user code is invalid or missing, it returns an error message with HTTP status code 401 (Unauthorized).
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} The HTTP response containing either the user data or an error message in JSON format.
+ */
 const getUserByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
     if(codUser){

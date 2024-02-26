@@ -1,5 +1,5 @@
 const dotenv = require('dotenv')
-const {loginUser, registerUser, getAll} = require("../src/services/userServices")
+const {loginUser, registerUser, getAll, getUserByCode} = require("../src/services/userServices")
 const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection")
 const {MongoClient} = require("mongodb")
 const path = require("path")
@@ -111,7 +111,7 @@ describe('loginUser services testing', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'Invalid email or password' })
     });
 
-    it('it should return 200 and all users that are stored if getUsers succeeds', async() =>{
+    it('it should return 200 and all users that are stored', async() =>{
         const res=mockResponse()
         const mockReq = {
             body: {}
@@ -120,6 +120,45 @@ describe('loginUser services testing', () => {
         await getAll(mockReq, res)
 
         expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json.mock.calls[0][0]).toHaveLength(await collections.users.countDocuments())
+    })
+
+    it('it should return 200 and the user with the userCode specified', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: "000897"
+            }
+        };
+
+        await getUserByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).toHaveBeenCalledWith(expect.any(Object))
+    })
+
+    it('it should return 401 if the userCode is wrong', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: "000877"
+            }
+        };
+
+        await getUserByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "User not found"})
+    })
+
+    it('it should return 401 if the userCode is not specified', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: ""
+            }
+        };
+        await getUserByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })
 
 });
