@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const {createUserFromData} = require("../factories/userFactory");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
-const {findUserByUsername, createUser, getUsers} = require("../repositories/userRepository");
+const {findUserByUsername, createUser, getUsers, findUserByCode} = require("../repositories/userRepository");
 const {skipTSAsExpression} = require("eslint-plugin-vue/lib/utils");
 
 /**
@@ -85,8 +85,8 @@ const getMe = asyncHandler(async(req, res) => {
     return res.status(200).json(req.user)
 })
 
-const getAll = asyncHandler(async(req,res) => {
-    const result=await getUsers()
+const getAll = asyncHandler(async(req, res) => {
+    const result = await getUsers()
     if(result){
         res.status(200).json(result)
     } else {
@@ -94,4 +94,18 @@ const getAll = asyncHandler(async(req,res) => {
     }
 })
 
-module.exports = {loginUser, generateToken, registerUser, getMe, getAll}
+const getUserByCode = asyncHandler(async (req, res) => {
+    const codUser = req.params.codUser
+    if(codUser){
+        const user = await findUserByCode(codUser)
+        if(user){
+            res.status(200).json(user)
+        } else{
+            res.status(401).json({message: 'User not found'})
+        }
+    }else{
+       res.status(401).json({message:'Invalid user data'})
+    }
+})
+
+module.exports = {loginUser, generateToken, registerUser, getMe, getAll, getUserByCode}

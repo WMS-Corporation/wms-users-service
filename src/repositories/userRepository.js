@@ -36,4 +36,8 @@ const getUsers = asyncHandler(async () => {
     return result
 })
 
-module.exports = {findUserByUsername, createUser, getUsers}
+const findUserByCode = asyncHandler(async (codUser) => {
+    return await collections?.users?.findOne({ _codUser: codUser })
+});
+
+module.exports = {findUserByUsername, createUser, getUsers, findUserByCode}
