@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const collections={};
+const collections = {};
 let client = null;
 
 /**
@@ -27,8 +27,6 @@ async function connectDB() {
         console.error('Error during the connection to db: ', error);
     }
 }
-
-
 
 module.exports = {
     connectDB,

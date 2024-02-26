@@ -12,4 +12,4 @@ function createUserFromData(userData) {
     return new User(userData._codUser, userData._username, userData._password, userData._name, userData._surname, userData._type);
 }
 
-module.exports={createUserFromData}
+module.exports = {createUserFromData}

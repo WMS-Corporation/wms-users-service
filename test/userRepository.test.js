@@ -1,4 +1,4 @@
-const {findUserByUsername, createUser} = require("../src/repositories/userRepository")
+const {findUserByUsername, createUser, getUsers} = require("../src/repositories/userRepository")
 const {connectDB, collections} = require("../src/config/dbConnection")
 const {User} = require("../src/entities/user")
 const path = require("path")
@@ -29,6 +29,12 @@ describe('userRepository testing', () => {
 
         expect(user).toBeNull()
     });
+
+    it('should return all the users', async() => {
+        const result= await getUsers()
+        console.log(collections.users.countDocuments())
+        expect(result.length).toEqual(await collections.users.countDocuments())
+    })
 
 
 });

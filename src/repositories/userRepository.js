@@ -9,7 +9,7 @@ const asyncHandler = require("express-async-handler");
  * @param {string} username - The username of the user to find.
  * @returns {Object|null} The user object if found, or null if not found.
  */
-const findUserByUsername=asyncHandler(async (username) => {
+const findUserByUsername = asyncHandler(async (username) => {
     return await collections?.users?.findOne({ _username: username })
 });
 
@@ -22,7 +22,7 @@ const findUserByUsername=asyncHandler(async (username) => {
  * @returns {Object} The result of the user creation operation.
  * @throws {Error} If failed to create user.
  */
-const createUser=asyncHandler(async (user) => {
+const createUser = asyncHandler(async (user) => {
     const result = await collections?.users?.insertOne(user);
     if (result) {
         return result;
@@ -31,5 +31,9 @@ const createUser=asyncHandler(async (user) => {
     }
 });
 
+const getUsers = asyncHandler(async () => {
+    const result = await collections?.users?.find().toArray();
+    return result
+})
 
-module.exports={findUserByUsername, createUser}
+module.exports = {findUserByUsername, createUser, getUsers}

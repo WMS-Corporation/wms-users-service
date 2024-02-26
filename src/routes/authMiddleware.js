@@ -1,4 +1,4 @@
-const jwt=require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const {collections} = require("../config/dbConnection");
 const asyncHandler = require('express-async-handler');
 const dotenv = require('dotenv');
@@ -15,8 +15,8 @@ const dotenv = require('dotenv');
  * @param {Function} next - Next middleware function in the route handling chain
  */
 dotenv.config()
-const verifyToken= asyncHandler(async(req, res, next) =>{
-    const token=req.headers.authorization;
+const verifyToken = asyncHandler(async(req, res, next) => {
+    const token = req.headers.authorization;
     if(!token){
         return res.status(401).json({message: "Token not provided"});
     }
@@ -29,4 +29,4 @@ const verifyToken= asyncHandler(async(req, res, next) =>{
     next();
 } )
 
-module.exports={verifyToken};
+module.exports = {verifyToken};

@@ -7,8 +7,6 @@ class User{
         this._surname = surname
         this._type = type
     }
-
-
     get codUser() {
         return this._codUser;
     }

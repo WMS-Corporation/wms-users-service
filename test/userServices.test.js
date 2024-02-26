@@ -1,5 +1,5 @@
 const dotenv = require('dotenv')
-const {loginUser, registerUser} = require("../src/services/userServices")
+const {loginUser, registerUser, getAll} = require("../src/services/userServices")
 const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection")
 const {MongoClient} = require("mongodb")
 const path = require("path")
@@ -110,5 +110,16 @@ describe('loginUser services testing', () => {
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({ message: 'Invalid email or password' })
     });
+
+    it('it should return 200 and all users that are stored if getUsers succeeds', async() =>{
+        const res=mockResponse()
+        const mockReq = {
+            body: {}
+        };
+
+        await getAll(mockReq, res)
+
+        expect(res.status).toHaveBeenCalledWith(200)
+    })
 
 });
