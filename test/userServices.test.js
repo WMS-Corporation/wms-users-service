@@ -18,23 +18,26 @@ describe('loginUser services testing', () => {
 
     beforeAll(async () => {
         await connectDB()
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
+        collections.users.insertOne(userData)
     });
 
-    beforeEach(async () =>{
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-        await collections.users.insertOne(userData)
-    })
+    // beforeEach(async () =>{
+    //     const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+    //     const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
+    //     await collections.users.insertOne(userData)
+    // })
 
-    afterEach(async ()=>{
-        await collections.users.deleteMany({})
-    })
-
-    afterAll(async () => {
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-        await collections.users.insertOne(userData)
-    })
+    // afterEach(async ()=>{
+    //     await collections.users.deleteMany({})
+    // })
+    //
+    // afterAll(async () => {
+    //     const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+    //     const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
+    //     await collections.users.insertOne(userData)
+    // })
 
     it('should return 401 if the data are invalid', async () => {
         const res=mockResponse()
