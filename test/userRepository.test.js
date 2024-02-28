@@ -1,4 +1,4 @@
-const {findUserByUsername, createUser, getUsers, findUserByCode} = require("../src/repositories/userRepository")
+const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData} = require("../src/repositories/userRepository")
 const {connectDB, collections} = require("../src/config/dbConnection")
 const {User} = require("../src/entities/user")
 const path = require("path")
@@ -7,10 +7,23 @@ const fs = require("fs")
 describe('userRepository testing', () => {
     beforeAll(async () => {
         await connectDB()
+    });
+
+    beforeEach(async () =>{
         const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
         collections.users.insertOne(userData)
-    });
+    })
+
+    afterEach(async ()=>{
+        collections.users.deleteMany({})
+    })
+
+    afterAll(async () => {
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
+        collections.users.insertOne(userData)
+    })
 
     it("should create a new user",async () =>{
         const result=await createUser(new User("000867","Pietro0096","$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW","Pietro","Lelli","Operational"))
@@ -42,12 +55,30 @@ describe('userRepository testing', () => {
         expect(user._surname).toEqual("Marcolini")
     })
 
-    it('Should return null if there is no user with the specified user code', async () => {
+    it('should return null if there is no user with the specified user code', async () => {
         const userCode = '000965'
         const user = await findUserByCode(userCode)
 
         expect(user).toBeNull()
     });
+
+    it('should return an updated user with new username', async() => {
+        const filter = { _codUser: "000897" }
+        const update = { $set: { _username: "Mutto97" } }
+
+        const updatedUser = await updateUserData(filter, update)
+        console.log("Updated user: ", updatedUser)
+        expect(updatedUser._username).toEqual("Mutto97")
+        collections.users.deleteMany({})
+    })
+
+    it('should return null if the filter is not correct', async() => {
+        const filter = { _codUser: "" }
+        const update = { $set: { _username: "Mutto97" } }
+
+        const updatedUser = await updateUserData(filter, update)
+        expect(updatedUser).toBeNull()
+    })
 
 
 });

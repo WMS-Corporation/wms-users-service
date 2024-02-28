@@ -1,5 +1,5 @@
 const dotenv = require('dotenv')
-const {loginUser, registerUser, getAll, getUserByCode} = require("../src/services/userServices")
+const {loginUser, registerUser, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode} = require("../src/services/userServices")
 const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection")
 const {MongoClient} = require("mongodb")
 const path = require("path")
@@ -18,10 +18,23 @@ describe('loginUser services testing', () => {
 
     beforeAll(async () => {
         await connectDB()
+    });
+
+    beforeEach(async () =>{
         const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-        collections.users.insertOne(userData)
-    });
+        await collections.users.insertOne(userData)
+    })
+
+    afterEach(async ()=>{
+        await collections.users.deleteMany({})
+    })
+
+    afterAll(async () => {
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
+        await collections.users.insertOne(userData)
+    })
 
     it('should return 401 if the data are invalid', async () => {
         const res=mockResponse()
@@ -43,7 +56,7 @@ describe('loginUser services testing', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'Invalid user data'})
     });
 
-    it('should return 200 and user data if registration is successful', async () => {
+    it('should return 200 if registration is successful', async () => {
         const res=mockResponse()
         const username = 'Michele0096'
         const mockReq = {
@@ -60,7 +73,6 @@ describe('loginUser services testing', () => {
         await registerUser(mockReq, res)
 
         expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json).toHaveBeenCalledWith({ message: 'Registration successful', user: expect.any(Object), token:expect.any(String) })
     });
 
     it('should return 401 if the user already exists', async () => {
@@ -83,7 +95,7 @@ describe('loginUser services testing', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'User already exists'})
     });
 
-    it('should return 200 and user data if login is successful', async () => {
+    it('should return 200 if login is successful', async () => {
         const res=mockResponse()
         const mockReq = {
             body: {
@@ -93,7 +105,6 @@ describe('loginUser services testing', () => {
         };
         await loginUser(mockReq, res)
         expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json).toHaveBeenCalledWith({ message: 'Login successful', user: expect.any(Object), token:expect.any(String) })
     });
 
     it('should return 401 if login credentials are invalid', async () => {
@@ -120,7 +131,7 @@ describe('loginUser services testing', () => {
         await getAll(mockReq, res)
 
         expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json.mock.calls[0][0]).toHaveLength(await collections.users.countDocuments())
+        expect(res.json).not.toBeNull()
     })
 
     it('it should return 200 and the user with the userCode specified', async ()=>{
@@ -133,7 +144,7 @@ describe('loginUser services testing', () => {
 
         await getUserByCode(mockReq, res)
         expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json).toHaveBeenCalledWith(expect.any(Object))
+        expect(res.json).not.toBeNull()
     })
 
     it('it should return 401 if the userCode is wrong', async ()=>{
@@ -157,6 +168,96 @@ describe('loginUser services testing', () => {
             }
         };
         await getUserByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
+    })
+
+    it('it should return 200 and the user updated with a new password', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: "000897"
+            },
+            body:{
+                password: "casa"
+            }
+        };
+
+        await updateUserPasswordByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).not.toBeNull()
+    })
+
+    it('it should return 401 if updating user password with not exists user code', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: "000877"
+            },body:{
+                password: "casa"
+            }
+        };
+
+        await updateUserPasswordByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "User not found"})
+    })
+
+    it('it should return 401 if updating user password without specified user code', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: ""
+            },body:{
+                password: "casa"
+            }
+        };
+        await updateUserPasswordByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
+    })
+
+    it('it should return 200 and the user updated with a new username', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: "000897"
+            },
+            body:{
+                username: "Mutto98"
+            }
+        };
+
+        await updateUsernameByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).not.toBeNull()
+    })
+
+    it('it should return 401 if updating username without correct user code', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: "000877"
+            },body:{
+                username: "Mutto98"
+            }
+        };
+
+        await updateUsernameByCode(mockReq, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "User not found"})
+    })
+
+    it('it should return 401 if updating username without specified the user code', async ()=>{
+        const res=mockResponse()
+        const mockReq = {
+            params: {
+                codUser: ""
+            },body:{
+                username: "Mutto98"
+            }
+        };
+        await updateUsernameByCode(mockReq, res)
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })

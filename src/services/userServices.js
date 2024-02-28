@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const {createUserFromData} = require("../factories/userFactory");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
-const {findUserByUsername, createUser, getUsers, findUserByCode} = require("../repositories/userRepository");
+const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData} = require("../repositories/userRepository");
 const {skipTSAsExpression} = require("eslint-plugin-vue/lib/utils");
 
 /**
@@ -144,4 +144,49 @@ const getUserByCode = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = {loginUser, generateToken, registerUser, getMe, getAll, getUserByCode}
+const updateUserPasswordByCode = asyncHandler(async (req, res) => {
+    const codUser = req.params.codUser
+    if(codUser){
+        const user = await findUserByCode(codUser)
+        if(user){
+            const password = req.body.password
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+            const filter = { _codUser: codUser }
+            const update = { $set: { _password: hashedPassword } }
+            const updatedUser = await updateUserData(filter, update)
+            res.status(200).json(updatedUser)
+        } else{
+            res.status(401).json({message: 'User not found'})
+        }
+    }else{
+        res.status(401).json({message:'Invalid user data'})
+    }
+})
+
+const updateUsernameByCode = asyncHandler(async (req, res) => {
+    const codUser = req.params.codUser
+    if(codUser){
+        const user = await findUserByCode(codUser)
+        if(user){
+            const username = req.body.username
+            const filter = { _codUser: codUser }
+            const update = { $set: { _username: username } }
+            const updatedUser = await updateUserData(filter, update)
+            res.status(200).json(updatedUser)
+        } else{
+            res.status(401).json({message: 'User not found'})
+        }
+    }else{
+        res.status(401).json({message:'Invalid user data'})
+    }
+})
+
+module.exports = {loginUser,
+    generateToken,
+    registerUser,
+    getMe,
+    getAll,
+    getUserByCode,
+    updateUserPasswordByCode,
+    updateUsernameByCode}
