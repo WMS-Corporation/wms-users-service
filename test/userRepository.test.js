@@ -16,16 +16,6 @@ describe('userRepository testing', () => {
         collections.users.insertOne(userData)
     })
 
-    // afterEach(async ()=>{
-    //     collections.users.deleteMany({})
-    // })
-    //
-    // afterAll(async () => {
-    //     const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-    //     const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-    //     collections.users.insertOne(userData)
-    // })
-
     it("should create a new user",async () =>{
         const result=await createUser(new User("000867","Pietro0096","$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW","Pietro","Lelli","Operational"))
         expect(result).toBeDefined()

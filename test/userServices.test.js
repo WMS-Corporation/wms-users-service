@@ -23,22 +23,6 @@ describe('loginUser services testing', () => {
         collections.users.insertOne(userData)
     });
 
-    // beforeEach(async () =>{
-    //     const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-    //     const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-    //     await collections.users.insertOne(userData)
-    // })
-
-    // afterEach(async ()=>{
-    //     await collections.users.deleteMany({})
-    // })
-    //
-    // afterAll(async () => {
-    //     const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-    //     const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-    //     await collections.users.insertOne(userData)
-    // })
-
     it('should return 401 if the data are invalid', async () => {
         const res=mockResponse()
         const username = 'Michele0096'
@@ -182,7 +166,7 @@ describe('loginUser services testing', () => {
                 codUser: "000897"
             },
             body:{
-                password: "casa"
+                password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
 
@@ -197,7 +181,7 @@ describe('loginUser services testing', () => {
             params: {
                 codUser: "000877"
             },body:{
-                password: "casa"
+                password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
 
@@ -212,7 +196,7 @@ describe('loginUser services testing', () => {
             params: {
                 codUser: ""
             },body:{
-                password: "casa"
+                password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
         await updateUserPasswordByCode(mockReq, res)

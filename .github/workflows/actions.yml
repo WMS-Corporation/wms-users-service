@@ -43,6 +43,7 @@ jobs:
           USER_COLLECTION: "User"
           JWT_SECRET: "secret_key"
           PASSWORD_USER_TEST: "bella"
+          NEW_PASSWORD_USER_TEST: "palla"
           PORT: 3000
 
       
@@ -74,6 +75,7 @@ jobs:
           USER_COLLECTION: "User"
           JWT_SECRET: "secret_key"
           PASSWORD_USER_TEST: "bella"
+          NEW_PASSWORD_USER_TEST: "palla"
           PORT: 3000
 
 
