@@ -38,6 +38,7 @@ jobs:
       - name: Run Tests
         run: npm test
         env:
+          DB_NAME_TEST: "WMS_TEST"
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
           USER_COLLECTION: "User"
@@ -70,6 +71,7 @@ jobs:
       - name: Test and coverage
         run: npm run coverage
         env:
+          DB_NAME_TEST: "WMS_TEST"
           DB_NAME: "WMS"
           DB_CONN_STRING: "mongodb://127.0.0.1:27017"
           USER_COLLECTION: "User"

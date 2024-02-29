@@ -1,5 +1,5 @@
 class User{
-    constructor(codUser, username, password, name, surname, type) {
+    constructor(username, password, name, surname, type, codUser) {
         this._codUser = codUser
         this._username = username
         this._password = password

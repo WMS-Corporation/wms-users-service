@@ -3,7 +3,7 @@ describe('User testing', () => {
     let user;
 
     beforeEach(() => {
-        user = new User('000897', 'Martin0075', 'Bella', 'Martin', 'Marcolini', 'Admin', "");
+        user = new User( 'Martin0075', 'Bella', 'Martin', 'Marcolini', 'Admin', '000897');
     });
 
 

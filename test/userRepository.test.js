@@ -6,18 +6,14 @@ const fs = require("fs")
 
 describe('userRepository testing', () => {
     beforeAll(async () => {
-        await connectDB()
-    });
-
-    beforeEach(async () =>{
-        await connectDB()
+        await connectDB(process.env.DB_NAME_TEST)
         const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
         collections.users.insertOne(userData)
-    })
+    });
 
     it("should create a new user",async () =>{
-        const result=await createUser(new User("000867","Pietro0096","$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW","Pietro","Lelli","Operational"))
+        const result=await createUser(new User("Pietro0096","$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW","Pietro","Lelli","Operational","000867"))
         expect(result).toBeDefined()
     })
 
@@ -60,7 +56,6 @@ describe('userRepository testing', () => {
         const updatedUser = await updateUserData(filter, update)
         console.log("Updated user: ", updatedUser)
         expect(updatedUser._username).toEqual("Mutto97")
-        collections.users.deleteMany({})
     })
 
     it('should return null if the filter is not correct', async() => {

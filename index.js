@@ -11,7 +11,6 @@ let corsOptions = {
     origin: new RegExp(`http:\/\/localhost:${userServicePort}\/.*`),
 };
 dotenv.config();
-
 const app = express();
 app.disable("x-powered-by");
 app.use(express.json());
@@ -19,6 +18,6 @@ app.use(cors(corsOptions));
 app.use(router);
 app.listen(userServicePort, () => console.info(`WMS-users-service is running`));
 
-connectDB();
+connectDB(process.env.DB_NAME);
 
 module.exports = { app };

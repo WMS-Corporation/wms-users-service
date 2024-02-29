@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData} = require("../repositories/userRepository");
 const {skipTSAsExpression} = require("eslint-plugin-vue/lib/utils");
+const {connectDB} = require("../config/dbConnection");
 
 /**
  * Registers a new user.
@@ -19,8 +20,7 @@ const {skipTSAsExpression} = require("eslint-plugin-vue/lib/utils");
  */
 const registerUser = asyncHandler(async(req, res) => {
     const user = createUserFromData(req.body);
-
-    if (!user.codUser || !user.username || !user.password || !user.name || !user.surname) {
+    if (!user.username || !user.password || !user.name || !user.surname) {
         return res.status(401).json({ message: 'Invalid user data' })
     }
 
@@ -28,7 +28,8 @@ const registerUser = asyncHandler(async(req, res) => {
     if(!userExists){
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(user.password, salt)
-        user.password = hashedPassword;
+        user.password = hashedPassword
+        user.codUser = await generateUniqueUserCode()
         const resultInsert = await createUser(user)
         if(resultInsert){
             res.status(200).json({ message: 'Registration successful', user, token: generateToken(user.codUser)})
@@ -180,6 +181,26 @@ const updateUsernameByCode = asyncHandler(async (req, res) => {
     }else{
         res.status(401).json({message:'Invalid user data'})
     }
+})
+
+const generateUniqueUserCode = asyncHandler (async () => {
+    let dbName = null;
+    if(process.env.NODE_ENV === 'test'){
+        dbName = process.env.DB_NAME_TEST
+    } else {
+        dbName = process.env.DB_NAME;
+    }
+
+    const myDB = await connectDB(dbName)
+    const collections = await myDB.listCollections().toArray()
+    let totalDocuments = 0
+    for (const collectionInfo of collections){
+        const collectionData = myDB.collection(collectionInfo.name)
+        const count = await collectionData.countDocuments()
+        totalDocuments += count
+    }
+    const nextCode = totalDocuments + 1
+    return nextCode.toString().padStart(6, '0')
 })
 
 module.exports = {loginUser,

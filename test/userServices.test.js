@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
 const {loginUser, registerUser, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode} = require("../src/services/userServices")
-const {connectDB, disconnectDB, collections} = require("../src/config/dbConnection")
+const {connectDB, disconnectDB, collections, db} = require("../src/config/dbConnection")
 const {MongoClient} = require("mongodb")
 const path = require("path")
 const fs = require("fs")
@@ -14,21 +14,25 @@ const mockResponse = () => {
     return res
 };
 
-describe('loginUser services testing', () => {
+describe('User services testing', () => {
 
     beforeAll(async () => {
-        await connectDB()
+        process.env.NODE_ENV = 'test';
+        await connectDB(process.env.DB_NAME_TEST)
         const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
         const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
         collections.users.insertOne(userData)
     });
+
+    afterAll(async () =>{
+        process.env.NODE_ENV = 'production';
+    })
 
     it('should return 401 if the data are invalid', async () => {
         const res=mockResponse()
         const username = 'Michele0096'
         const mockReq = {
             body: {
-                _codUser: "000866",
                 _username: username,
                 _password: "",
                 _name: "",
@@ -48,7 +52,6 @@ describe('loginUser services testing', () => {
         const username = 'Michele0096'
         const mockReq = {
             body: {
-                _codUser: "000866",
                 _username: username,
                 _password: password,
                 _name: "Michele",
@@ -67,7 +70,6 @@ describe('loginUser services testing', () => {
         const username = 'Martin0075'
         const mockReq = {
             body: {
-                _codUser: "000897",
                 _username: username,
                 _password: password,
                 _name: "Michele",

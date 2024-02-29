@@ -13,7 +13,7 @@ describe('Database Connection', () => {
 
     beforeAll(async () => {
         connection = await MongoClient.connect(process.env.DB_CONN_STRING);
-        db = connection.db(process.env.DB_NAME);
+        db = connection.db(process.env.DB_NAME_TEST);
         usersCollection = db.collection(process.env.USER_COLLECTION);
     });
 
@@ -22,8 +22,8 @@ describe('Database Connection', () => {
     });
 
     it('should connect to the database and collection', async () => {
-        await connectDB();
-        expect(db.databaseName).toBe("WMS");
+        await connectDB(process.env.DB_NAME_TEST);
+        expect(db.databaseName).toBe("WMS_TEST");
         expect(collections.users).toBeDefined();
         expect(collections.users.collectionName).toBe(usersCollection.collectionName);
 

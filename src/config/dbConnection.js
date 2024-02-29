@@ -5,6 +5,7 @@ dotenv.config();
 
 const collections = {};
 let client = null;
+let db = null;
 
 /**
  * Connects to the database.
@@ -13,16 +14,15 @@ let client = null;
  * specified in the environment variables. It initializes the MongoDB client, connects to the
  * database, and sets up the users collection for further database operations.
  */
-async function connectDB() {
+async function connectDB(dbName) {
     try {
         client = new MongoClient(process.env.DB_CONN_STRING);
         await client.connect();
-        // Non chiamare disconnectDB() qui, a meno che tu non abbia un motivo specifico per farlo
-        const db = client.db(process.env.DB_NAME);
+        db = client.db(dbName);
         const usersCollection = db.collection(process.env.USER_COLLECTION);
         collections.users = usersCollection;
-        //console.log(await collections.users.findOne({Username: "Martin0075"}))
         console.log(`Successfully connected to database: ${db.databaseName} and collection: ${usersCollection.collectionName}`);
+        return db;
     } catch (error) {
         console.error('Error during the connection to db: ', error);
     }
@@ -30,5 +30,6 @@ async function connectDB() {
 
 module.exports = {
     connectDB,
-    collections
+    collections,
+    db
 };
