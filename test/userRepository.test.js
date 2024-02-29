@@ -1,4 +1,4 @@
-const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData} = require("../src/repositories/userRepository")
+const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData, deleteUser} = require("../src/repositories/userRepository")
 const {connectDB, collections} = require("../src/config/dbConnection")
 const {User} = require("../src/entities/user")
 const path = require("path")
@@ -54,7 +54,6 @@ describe('userRepository testing', () => {
         const update = { $set: { _username: "Mutto97" } }
 
         const updatedUser = await updateUserData(filter, update)
-        console.log("Updated user: ", updatedUser)
         expect(updatedUser._username).toEqual("Mutto97")
     })
 
@@ -64,6 +63,14 @@ describe('userRepository testing', () => {
 
         const updatedUser = await updateUserData(filter, update)
         expect(updatedUser).toBeNull()
+    })
+
+    it('should return null if the user has been deleted', async() => {
+        const userCode = '000965'
+        await deleteUser(userCode)
+        const deletedUser = await findUserByCode(userCode)
+
+        expect(deletedUser).toBeNull()
     })
 
 

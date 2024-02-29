@@ -3,8 +3,7 @@ const bcrypt = require("bcryptjs");
 const {createUserFromData} = require("../factories/userFactory");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
-const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData} = require("../repositories/userRepository");
-const {skipTSAsExpression} = require("eslint-plugin-vue/lib/utils");
+const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData, deleteUser} = require("../repositories/userRepository");
 const {connectDB} = require("../config/dbConnection");
 
 /**
@@ -183,6 +182,22 @@ const updateUsernameByCode = asyncHandler(async (req, res) => {
     }
 })
 
+const deleteUserByCode = asyncHandler(async (req, res) => {
+    const codUser = req.params.codUser
+    if(codUser){
+        const user = await findUserByCode(codUser)
+        if(user){
+            const userCode = user._codUser
+            await deleteUser(userCode)
+            res.status(200).json(userCode)
+        } else{
+            res.status(401).json({message: 'User not found'})
+        }
+    }else{
+        res.status(401).json({message:'Invalid user data'})
+    }
+})
+
 const generateUniqueUserCode = asyncHandler (async () => {
     let dbName = null;
     if(process.env.NODE_ENV === 'test'){
@@ -210,4 +225,5 @@ module.exports = {loginUser,
     getAll,
     getUserByCode,
     updateUserPasswordByCode,
-    updateUsernameByCode}
+    updateUsernameByCode,
+    deleteUserByCode}

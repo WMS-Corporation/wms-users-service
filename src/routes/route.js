@@ -1,5 +1,7 @@
 const express = require('express');
-const {loginUser, registerUser, getMe, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode} = require("../services/userServices");
+const {loginUser, registerUser, getMe, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode,
+    deleteUserByCode
+} = require("../services/userServices");
 const {verifyToken} = require("./authMiddleware");
 const router = express.Router();
 
@@ -13,5 +15,6 @@ router.get("/all", getAll)
 router.get("/:codUser", getUserByCode)
 router.put("/:codUser", updateUsernameByCode)
 router.put("/password/:codUser", updateUserPasswordByCode)
+router.delete("/:codUser", deleteUserByCode)
 
 module.exports = router;
