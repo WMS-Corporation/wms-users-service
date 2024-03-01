@@ -55,12 +55,29 @@ const findUserByCode = asyncHandler(async (codUser) => {
     return await collections?.users?.findOne({ _codUser: codUser })
 });
 
+/**
+ * Updates user data based on a filter.
+ *
+ * This function updates user data based on the provided filter criteria and the update object.
+ *
+ * @param {Object} filter - The filter criteria to find the user(s) to update.
+ * @param {Object} update - The update object containing the fields to update and their new values.
+ * @returns {Object|null} The updated user data if the user is found, otherwise null.
+ */
 const updateUserData = asyncHandler(async(filter, update) => {
     const options = { returnOriginal: false}
     await collections?.users?.findOneAndUpdate(filter, update, options)
     return await collections?.users?.findOne(filter)
 })
 
+/**
+ * Deletes a user based on user code.
+ *
+ * This function deletes a user based on the provided user code.
+ *
+ * @param {string} codUser - The user code of the user to be deleted.
+ * @returns {Object} The result of the deletion operation.
+ */
 const deleteUser = asyncHandler(async (codUser) => {
     return await collections?.users?.deleteOne({_codUser: codUser})
 })

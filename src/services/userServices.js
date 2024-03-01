@@ -144,6 +144,21 @@ const getUserByCode = asyncHandler(async (req, res) => {
     }
 })
 
+/**
+ * Updates user password by user code.
+ *
+ * This function updates the password of a user based on the provided user code.
+ * It extracts the user code from the request parameters.
+ * If the user code is provided, it retrieves the user data using findUserByCode function.
+ * If the user is found, it hashes the new password using bcrypt.
+ * It then updates the user's password in the database and returns the updated user data with HTTP status code 200 (OK).
+ * If the user is not found, it returns an error message with HTTP status code 401 (Unauthorized).
+ * If the user code is invalid or missing, it returns an error message with HTTP status code 401 (Unauthorized).
+ *
+ * @param {Object} req - The request object containing user data.
+ * @param {Object} res - The response object used to send the response.
+ * @returns {Object} The HTTP response containing either the updated user data or an error message in JSON format.
+ */
 const updateUserPasswordByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
     if(codUser){
@@ -164,6 +179,20 @@ const updateUserPasswordByCode = asyncHandler(async (req, res) => {
     }
 })
 
+/**
+ * Updates user username by user code.
+ *
+ * This function updates the username of a user based on the provided user code.
+ * It extracts the user code from the request parameters.
+ * If the user code is provided, it retrieves the user data using findUserByCode function.
+ * If the user is found, it updates the user's username in the database and returns the updated user data with HTTP status code 200 (OK).
+ * If the user is not found, it returns an error message with HTTP status code 401 (Unauthorized).
+ * If the user code is invalid or missing, it returns an error message with HTTP status code 401 (Unauthorized).
+ *
+ * @param {Object} req - The request object containing user data.
+ * @param {Object} res - The response object used to send the response.
+ * @returns {Object} The HTTP response containing either the updated user data or an error message in JSON format.
+ */
 const updateUsernameByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
     if(codUser){
@@ -182,6 +211,20 @@ const updateUsernameByCode = asyncHandler(async (req, res) => {
     }
 })
 
+/**
+ * Deletes user by user code.
+ *
+ * This function deletes a user based on the provided user code.
+ * It extracts the user code from the request parameters.
+ * If the user code is provided, it retrieves the user data using findUserByCode function.
+ * If the user is found, it deletes the user from the database and returns the deleted user code with HTTP status code 200 (OK).
+ * If the user is not found, it returns an error message with HTTP status code 401 (Unauthorized).
+ * If the user code is invalid or missing, it returns an error message with HTTP status code 401 (Unauthorized).
+ *
+ * @param {Object} req - The request object containing user data.
+ * @param {Object} res - The response object used to send the response.
+ * @returns {Object} The HTTP response containing either the deleted user code or an error message in JSON format.
+ */
 const deleteUserByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
     if(codUser){
@@ -198,6 +241,16 @@ const deleteUserByCode = asyncHandler(async (req, res) => {
     }
 })
 
+/**
+ * Generates a unique user code.
+ *
+ * This function generates a unique user code by counting the total number of documents across all collections in the database.
+ * It connects to the appropriate database based on the environment (either test or production).
+ * It then counts the total number of documents in each collection and calculates the next available user code.
+ * The generated user code is padded with leading zeros to ensure it has a fixed length of 6 characters.
+ *
+ * @returns {string} The generated unique user code.
+ */
 const generateUniqueUserCode = asyncHandler (async () => {
     let dbName = null;
     if(process.env.NODE_ENV === 'test'){
