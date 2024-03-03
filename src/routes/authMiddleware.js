@@ -26,6 +26,13 @@ const verifyToken = asyncHandler(async(req, res, next) => {
     if (!req.user) {
         return res.status(401).json({message: "Invalid token"});
     }
+
+    if (req.method === "DELETE") {
+        // Controllo del tipo di utente
+        if (req.user._type !== "Admin") {
+            return res.status(401).json({ message: "Only admin users can perform this action" });
+        }
+    }
     next();
 } )
 

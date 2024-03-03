@@ -11,10 +11,10 @@ router.get('/', (req, res) => {
 router.post('/register', registerUser)
 router.post('/login', loginUser);
 router.get("/me", verifyToken, getMe)
-router.get("/all", getAll)
-router.get("/:codUser", getUserByCode)
-router.put("/:codUser", updateUsernameByCode)
-router.put("/password/:codUser", updateUserPasswordByCode)
-router.delete("/:codUser", deleteUserByCode)
+router.get("/all", verifyToken, getAll)
+router.get("/:codUser", verifyToken, getUserByCode)
+router.put("/:codUser", verifyToken, updateUsernameByCode)
+router.put("/password/:codUser", verifyToken, updateUserPasswordByCode)
+router.delete("/:codUser", verifyToken, deleteUserByCode)
 
 module.exports = router;
