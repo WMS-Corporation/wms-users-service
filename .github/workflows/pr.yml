@@ -1,5 +1,4 @@
 name: Run Tests PR
-
 on:
   pull_request:
     branches:
