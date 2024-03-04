@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/WMS-Corporation/wms-users-service/compare/v1.0.0...v1.0.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency mongodb to v6.4.0 ([18c2690](https://github.com/WMS-Corporation/wms-users-service/commit/18c269059af07b3ac0e2c8fd2f9c020dd8dc2646))
+
 ## 1.0.0 (2024-03-04)
 
 
