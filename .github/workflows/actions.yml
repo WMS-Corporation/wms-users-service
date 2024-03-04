@@ -46,9 +46,6 @@ jobs:
           PASSWORD_USER_TEST: ${{ secrets.PASSWORD_USER_TEST }}
           NEW_PASSWORD_USER_TEST: ${{ secrets.NEW_PASSWORD_USER_TEST }}
           PORT: ${{ secrets.PORT }}
-
-      
-
       - name: Run EsLint quality check
         run: npm run eslint
 
