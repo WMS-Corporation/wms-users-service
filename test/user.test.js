@@ -1,11 +1,15 @@
 const { User } = require('../src/entities/user');
+const path = require("path");
+const fs = require("fs");
+const {createUserFromData} = require("../src/factories/userFactory");
 describe('User testing', () => {
     let user;
 
-    beforeEach(() => {
-        user = new User( 'Martin0075', 'Bella', 'Martin', 'Marcolini', 'Admin', '000897');
+    beforeAll(() => {
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
+        user = createUserFromData(userData[0])
     });
-
 
     it('should return the correct codUser', () => {
         expect(user.codUser).toBe('000897');
@@ -16,7 +20,7 @@ describe('User testing', () => {
     });
 
     it('should return the correct password', () => {
-        expect(user.password).toBe('Bella');
+        expect(user.password).toBe('$2y$10$mrpe.j2q/FaYrm9FBI/DfuFZMqiXRdLPkK0jHBFkJKAms2BVZwF12');
     });
 
     it('should return the correct name', () => {

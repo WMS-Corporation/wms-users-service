@@ -1,19 +1,26 @@
 const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData, deleteUser} = require("../src/repositories/userRepository")
-const {connectDB, collections} = require("../src/config/dbConnection")
+const {connectDB, collections, closeDB} = require("../src/config/dbConnection")
 const {User} = require("../src/entities/user")
 const path = require("path")
 const fs = require("fs")
 
 describe('userRepository testing', () => {
     beforeAll(async () => {
-        await connectDB(process.env.DB_NAME_TEST)
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-        collections.users.insertOne(userData)
+        await connectDB(process.env.DB_NAME_TEST_REPOSITORY);
     });
 
-    it("should create a new user",async () =>{
-        const result=await createUser(new User("Pietro0096","$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW","Pietro","Lelli","Operational","000867"))
+    beforeEach(async() => {
+        await collections.users.deleteMany()
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        await collections.users.insertMany(userData)
+    })
+    afterAll(async () => {
+        await closecome posso intitolare un commit che DB()
+    });
+
+    it("should create a new user", async () => {
+        const result = await createUser(new User("Pietro0096", "$2b$10$StPwi72JFnkcPLkgGdJYDOvA.M5Jrj7HTlyj8L6PQaetOyk87/6lW", "Pietro", "Lelli", "Operational", "000867"))
         expect(result).toBeDefined()
     })
 
@@ -31,11 +38,11 @@ describe('userRepository testing', () => {
     });
 
     it('should return all the users', async() => {
-        const result= await getUsers()
+        const result = await getUsers()
         expect(result.length).toEqual(await collections.users.countDocuments())
     })
 
-    it('should return a user by userCode', async() =>{
+    it('should return a user by userCode', async() => {
         const userCode = "000897"
         const user = await findUserByCode(userCode)
         expect(user._name).toEqual("Martin")
@@ -72,6 +79,5 @@ describe('userRepository testing', () => {
 
         expect(deletedUser).toBeNull()
     })
-
 
 });

@@ -8,7 +8,6 @@ on:
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   testJest:
     runs-on: ${{ matrix.os }}
@@ -38,14 +37,17 @@ jobs:
       - name: Run Tests
         run: npm test
         env:
-          DB_NAME_TEST: ${{ secrets.DB_NAME_TEST}}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_CONN_STRING: ${{ secrets.DB_CONN_STRING }}
-          USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PASSWORD_USER_TEST: ${{ secrets.PASSWORD_USER_TEST }}
-          NEW_PASSWORD_USER_TEST: ${{ secrets.NEW_PASSWORD_USER_TEST }}
-          PORT: ${{ secrets.PORT }}
+          PASSWORD_USER_TEST: "bella"
+          NEW_PASSWORD_USER_TEST: "palla"
+          DB_NAME: "WMS"
+          DB_NAME_TEST_MIDDLEWARE: "WMS_TEST_MIDDLEWARE"
+          DB_NAME_TEST_REPOSITORY: "WMS_TEST_REPOSITORY"
+          DB_NAME_TEST_SERVICES: "WMS_TEST_SERVICES"
+          DB_CONN_STRING: "mongodb://127.0.0.1:27017"
+          USER_COLLECTION: "User"
+          COUNTER_COLLECTION: "Counter"
+          JWT_SECRET: "secret_key"
+          PORT: "4001"
       - name: Run EsLint quality check
         run: npm run eslint
 
@@ -68,16 +70,17 @@ jobs:
       - name: Test and coverage
         run: npm run coverage
         env:
-          DB_NAME_TEST: ${{ secrets.DB_NAME_TEST}}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_CONN_STRING: ${{ secrets.DB_CONN_STRING }}
-          USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PASSWORD_USER_TEST: ${{ secrets.PASSWORD_USER_TEST }}
-          NEW_PASSWORD_USER_TEST: ${{ secrets.NEW_PASSWORD_USER_TEST }}
-          PORT: ${{ secrets.PORT }}
-
-
+          PASSWORD_USER_TEST: "bella"
+          NEW_PASSWORD_USER_TEST: "palla"
+          DB_NAME: "WMS"
+          DB_NAME_TEST_MIDDLEWARE: "WMS_TEST_MIDDLEWARE"
+          DB_NAME_TEST_REPOSITORY: "WMS_TEST_REPOSITORY"
+          DB_NAME_TEST_SERVICES: "WMS_TEST_SERVICES"
+          DB_CONN_STRING: "mongodb://127.0.0.1:27017"
+          USER_COLLECTION: "User"
+          COUNTER_COLLECTION: "Counter"
+          JWT_SECRET: "secret_key"
+          PORT: "4001"
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

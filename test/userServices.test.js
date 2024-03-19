@@ -1,35 +1,47 @@
 const dotenv = require('dotenv')
 const {loginUser, registerUser, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode, deleteUserByCode} = require("../src/services/userServices")
-const {connectDB, disconnectDB, collections, db} = require("../src/config/dbConnection")
-const {MongoClient} = require("mongodb")
+const {connectDB, disconnectDB, collections, db, closeDB} = require("../src/config/dbConnection")
 const path = require("path")
 const fs = require("fs")
 
 dotenv.config()
-const password=process.env.PASSWORD_USER_TEST
+const password = process.env.PASSWORD_USER_TEST
 const mockResponse = () => {
     const res = {}
     res.status = jest.fn().mockReturnValue(res)
     res.json = jest.fn().mockReturnValue(res)
     return res
 };
+const req = {
+    body : "",
+    user : "",
+    params: ""
+}
 
 describe('User services testing', () => {
 
     beforeAll(async () => {
-        process.env.NODE_ENV = 'test';
-        await connectDB(process.env.DB_NAME_TEST)
-        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json')
-        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-        collections.users.insertOne(userData)
+        await connectDB(process.env.DB_NAME_TEST_SERVICES);
+        await collections.counter.deleteMany()
+        await collections.counter.insertOne({count : 1})
     });
 
-    afterAll(async () =>{
-        process.env.NODE_ENV = 'production';
+    beforeEach(async() => {
+        await collections.users.deleteMany()
+        const jsonFilePath = path.resolve(__dirname, './Resources/MongoDB/WMS.User.json');
+        const userData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+        await collections.users.insertMany(userData)
+        req.body = ""
+        req.user = ""
+        req.params = ""
     })
 
+    afterAll(async () => {
+        await closeDB()
+    });
+
     it('it should return 401 if the data are invalid', async () => {
-        const res=mockResponse()
+        const res = mockResponse()
         const username = 'Michele0096'
         const req = {
             body: {
@@ -48,7 +60,7 @@ describe('User services testing', () => {
     });
 
     it('it should return 200 if registration is successful', async () => {
-        const res=mockResponse()
+        const res = mockResponse()
         const username = 'Michele0096'
         const req = {
             body: {
@@ -66,7 +78,7 @@ describe('User services testing', () => {
     });
 
     it('it should return 401 if the user already exists', async () => {
-        const res=mockResponse()
+        const res = mockResponse()
         const username = 'Martin0075'
         const req = {
             body: {
@@ -85,7 +97,7 @@ describe('User services testing', () => {
     });
 
     it('it should return 200 if login is successful', async () => {
-        const res=mockResponse()
+        const res = mockResponse()
         const req = {
             body: {
                 _username: 'Martin0075',
@@ -97,7 +109,7 @@ describe('User services testing', () => {
     });
 
     it('it should return 401 if login credentials are invalid', async () => {
-        const res=mockResponse()
+        const res = mockResponse()
         const req = {
             body: {
                 _username: 'Martin0077',
@@ -111,8 +123,8 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'Invalid email or password' })
     });
 
-    it('it should return 200 and all users that are stored', async() =>{
-        const res=mockResponse()
+    it('it should return 200 and all users that are stored', async() => {
+        const res = mockResponse()
         const req = {
             body: {}
         };
@@ -123,8 +135,8 @@ describe('User services testing', () => {
         expect(res.json).not.toBeNull()
     })
 
-    it('it should return 200 and the user with the userCode specified', async ()=>{
-        const res=mockResponse()
+    it('it should return 200 and the user with the userCode specified', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000897"
@@ -136,8 +148,8 @@ describe('User services testing', () => {
         expect(res.json).not.toBeNull()
     })
 
-    it('it should return 401 if the userCode is wrong', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if the userCode is wrong', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000877"
@@ -149,8 +161,8 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "User not found"})
     })
 
-    it('it should return 401 if the userCode is not specified', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if the userCode is not specified', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: ""
@@ -161,8 +173,8 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })
 
-    it('it should return 200 and the user updated with a new password', async ()=>{
-        const res=mockResponse()
+    it('it should return 200 and the user updated with a new password', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000897"
@@ -177,12 +189,12 @@ describe('User services testing', () => {
         expect(res.json).not.toBeNull()
     })
 
-    it('it should return 401 if updating user password with not exists user code', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if updating user password with not exists user code', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000877"
-            },body:{
+            }, body:{
                 password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
@@ -192,12 +204,12 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "User not found"})
     })
 
-    it('it should return 401 if updating user password without specified user code', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if updating user password without specified user code', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: ""
-            },body:{
+            }, body:{
                 password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
@@ -206,8 +218,8 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })
 
-    it('it should return 200 and the user updated with a new username', async ()=>{
-        const res=mockResponse()
+    it('it should return 200 and the user updated with a new username', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000897"
@@ -222,12 +234,12 @@ describe('User services testing', () => {
         expect(res.json).not.toBeNull()
     })
 
-    it('it should return 401 if updating username without correct user code', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if updating username without correct user code', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000877"
-            },body:{
+            }, body:{
                 username: "Mutto98"
             }
         };
@@ -237,12 +249,12 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "User not found"})
     })
 
-    it('it should return 401 if updating username without specified the user code', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if updating username without specified the user code', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: ""
-            },body:{
+            }, body:{
                 username: "Mutto98"
             }
         };
@@ -251,8 +263,8 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })
 
-    it('it should return 200 and the code of the user that has been deleted', async ()=>{
-        const res=mockResponse()
+    it('it should return 200 and the code of the user that has been deleted', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000897"
@@ -264,8 +276,8 @@ describe('User services testing', () => {
         expect(res.json).not.toBeNull()
     })
 
-    it('it should return 401 if deleting user without correct user code', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if deleting user without correct user code', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: "000877"
@@ -277,8 +289,8 @@ describe('User services testing', () => {
         expect(res.json).toHaveBeenCalledWith({message: "User not found"})
     })
 
-    it('it should return 401 if deleting user without specified the user code', async ()=>{
-        const res=mockResponse()
+    it('it should return 401 if deleting user without specified the user code', async () => {
+        const res = mockResponse()
         const req = {
             params: {
                 codUser: ""

@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 /*
 * Allow access from any subroute of http://localhost:3000
 * */
+console.log(process.env.PORT)
 const userServicePort = process.env.PORT || 4001;
 let corsOptions = {
     origin: new RegExp(`http:\/\/localhost:${userServicePort}\/.*`),

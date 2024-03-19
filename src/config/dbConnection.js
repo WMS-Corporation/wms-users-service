@@ -21,6 +21,7 @@ async function connectDB(dbName) {
         db = client.db(dbName);
         const usersCollection = db.collection(process.env.USER_COLLECTION);
         collections.users = usersCollection;
+        collections.counter = db.collection(process.env.COUNTER_COLLECTION);
         console.log(`Successfully connected to database: ${db.databaseName} and collection: ${usersCollection.collectionName}`);
         return db;
     } catch (error) {
@@ -28,8 +29,27 @@ async function connectDB(dbName) {
     }
 }
 
+/**
+ * Closes the database connection.
+ *
+ * This function closes the MongoDB client connection and performs cleanup tasks.
+ */
+async function closeDB() {
+    try {
+        if (client) {
+            await client.close();
+            console.log('Database connection closed successfully.');
+        } else {
+            console.warn('No database connection to close.');
+        }
+    } catch (error) {
+        console.error('Error while closing database connection: ', error);
+    }
+}
+
 module.exports = {
     connectDB,
     collections,
-    db
+    db,
+    closeDB
 };

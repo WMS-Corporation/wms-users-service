@@ -82,9 +82,25 @@ const deleteUser = asyncHandler(async (codUser) => {
     return await collections?.users?.deleteOne({_codUser: codUser})
 })
 
+/**
+ * Generates a unique user code.
+ *
+ * This function generates a unique user code by retrieving the next available code from the counter collection,
+ * incrementing the count, and returning the next code as a string padded with zeros to ensure a fixed length of 6 characters.
+ *
+ * @returns {string} The next unique task code.
+ */
+const generateUniqueUserCode = asyncHandler (async () => {
+    const nextCode = await collections?.counter?.findOne()
+    await collections.counter.updateOne({}, { $inc: {count: 1}})
+    return nextCode.count.toString().padStart(6, '0')
+})
+
 module.exports = {findUserByUsername,
     createUser,
     getUsers,
     findUserByCode,
     updateUserData,
-    deleteUser}
+    deleteUser,
+    generateUniqueUserCode
+}

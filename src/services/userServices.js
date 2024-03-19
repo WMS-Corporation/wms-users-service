@@ -3,8 +3,7 @@ const bcrypt = require("bcryptjs");
 const {createUserFromData} = require("../factories/userFactory");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
-const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData, deleteUser} = require("../repositories/userRepository");
-const {connectDB} = require("../config/dbConnection");
+const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData, deleteUser, generateUniqueUserCode} = require("../repositories/userRepository");
 
 /**
  * Registers a new user.
@@ -239,36 +238,6 @@ const deleteUserByCode = asyncHandler(async (req, res) => {
     }else{
         res.status(401).json({message:'Invalid user data'})
     }
-})
-
-/**
- * Generates a unique user code.
- *
- * This function generates a unique user code by counting the total number of documents across all collections in the database.
- * It connects to the appropriate database based on the environment (either test or production).
- * It then counts the total number of documents in each collection and calculates the next available user code.
- * The generated user code is padded with leading zeros to ensure it has a fixed length of 6 characters.
- *
- * @returns {string} The generated unique user code.
- */
-const generateUniqueUserCode = asyncHandler (async () => {
-    let dbName = null;
-    if(process.env.NODE_ENV === 'test'){
-        dbName = process.env.DB_NAME_TEST
-    } else {
-        dbName = process.env.DB_NAME;
-    }
-
-    const myDB = await connectDB(dbName)
-    const collections = await myDB.listCollections().toArray()
-    let totalDocuments = 0
-    for (const collectionInfo of collections){
-        const collectionData = myDB.collection(collectionInfo.name)
-        const count = await collectionData.countDocuments()
-        totalDocuments += count
-    }
-    const nextCode = totalDocuments + 1
-    return nextCode.toString().padStart(6, '0')
 })
 
 module.exports = {loginUser,
