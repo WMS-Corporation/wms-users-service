@@ -16,7 +16,7 @@ describe('userRepository testing', () => {
         await collections.users.insertMany(userData)
     })
     afterAll(async () => {
-        await closecome posso intitolare un commit che DB()
+        await closeDB()
     });
 
     it("should create a new user", async () => {
