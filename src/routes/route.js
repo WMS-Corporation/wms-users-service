@@ -1,6 +1,6 @@
 const express = require('express');
-const {loginUser, registerUser, getMe, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode,
-    deleteUserByCode
+const {loginUser, registerUser, getMe, getAll, getUserByCode,
+    deleteUserByCode, updateUserDataByCode
 } = require("../services/userServices");
 const {verifyToken} = require("./authMiddleware");
 const router = express.Router();
@@ -13,8 +13,7 @@ router.post('/login', loginUser);
 router.get("/me", verifyToken, getMe)
 router.get("/all", verifyToken, getAll)
 router.get("/:codUser", verifyToken, getUserByCode)
-router.put("/:codUser", verifyToken, updateUsernameByCode)
-router.put("/password/:codUser", verifyToken, updateUserPasswordByCode)
+router.put("/:codUser", verifyToken, updateUserDataByCode)
 router.delete("/:codUser", verifyToken, deleteUserByCode)
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
-const {loginUser, registerUser, getAll, getUserByCode, updateUserPasswordByCode, updateUsernameByCode, deleteUserByCode} = require("../src/services/userServices")
-const {connectDB, disconnectDB, collections, db, closeDB} = require("../src/config/dbConnection")
+const {loginUser, registerUser, getAll, getUserByCode, updateUserDataByCode, deleteUserByCode} = require("../src/services/userServices")
+const {connectDB, collections, closeDB} = require("../src/config/dbConnection")
 const path = require("path")
 const fs = require("fs")
 
@@ -180,11 +180,11 @@ describe('User services testing', () => {
                 codUser: "000897"
             },
             body:{
-                password: process.env.NEW_PASSWORD_USER_TEST
+                _password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
 
-        await updateUserPasswordByCode(req, res)
+        await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(200)
         expect(res.json).not.toBeNull()
     })
@@ -195,11 +195,11 @@ describe('User services testing', () => {
             params: {
                 codUser: "000877"
             }, body:{
-                password: process.env.NEW_PASSWORD_USER_TEST
+                _password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
 
-        await updateUserPasswordByCode(req, res)
+        await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({message: "User not found"})
     })
@@ -210,10 +210,10 @@ describe('User services testing', () => {
             params: {
                 codUser: ""
             }, body:{
-                password: process.env.NEW_PASSWORD_USER_TEST
+                _password: process.env.NEW_PASSWORD_USER_TEST
             }
         };
-        await updateUserPasswordByCode(req, res)
+        await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })
@@ -225,11 +225,11 @@ describe('User services testing', () => {
                 codUser: "000897"
             },
             body:{
-                username: "Mutto98"
+                _username: "Mutto98"
             }
         };
 
-        await updateUsernameByCode(req, res)
+        await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(200)
         expect(res.json).not.toBeNull()
     })
@@ -240,11 +240,11 @@ describe('User services testing', () => {
             params: {
                 codUser: "000877"
             }, body:{
-                username: "Mutto98"
+                _username: "Mutto98"
             }
         };
 
-        await updateUsernameByCode(req, res)
+        await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({message: "User not found"})
     })
@@ -255,10 +255,10 @@ describe('User services testing', () => {
             params: {
                 codUser: ""
             }, body:{
-                username: "Mutto98"
+                _username: "Mutto98"
             }
         };
-        await updateUsernameByCode(req, res)
+        await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
     })

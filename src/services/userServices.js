@@ -144,62 +144,30 @@ const getUserByCode = asyncHandler(async (req, res) => {
 })
 
 /**
- * Updates user password by user code.
- *
- * This function updates the password of a user based on the provided user code.
+ * Updates user data based on user code.
+ * This function updates a user's data using the provided user code.
  * It extracts the user code from the request parameters.
- * If the user code is provided, it retrieves the user data using findUserByCode function.
- * If the user is found, it hashes the new password using bcrypt.
- * It then updates the user's password in the database and returns the updated user data with HTTP status code 200 (OK).
- * If the user is not found, it returns an error message with HTTP status code 401 (Unauthorized).
- * If the user code is invalid or missing, it returns an error message with HTTP status code 401 (Unauthorized).
- *
- * @param {Object} req - The request object containing user data.
- * @param {Object} res - The response object used to send the response.
- * @returns {Object} The HTTP response containing either the updated user data or an error message in JSON format.
+ * If a valid user code is provided, it retrieves the user data using the findUserByCode function.
+ * Upon finding the user, it hashes the new password using bcrypt.
+ * Subsequently, it updates the user data in the database and returns the updated user data with an HTTP status code of 200 (OK).
+ * If the user is not found, it returns an error message with an HTTP status code of 401 (Unauthorized).
+ * In case of an invalid or missing user code, it returns an error message with an HTTP status code of 401 (Unauthorized).
+ @param {Object} req - The request object containing user data.
+ @param {Object} res - The response object used to send the response.
+ @returns {Object} The HTTP response containing either the updated user data or an error message in JSON format.
  */
-const updateUserPasswordByCode = asyncHandler(async (req, res) => {
+const updateUserDataByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
     if(codUser){
         const user = await findUserByCode(codUser)
         if(user){
-            const password = req.body.password
-            const salt = await bcrypt.genSalt(10)
-            const hashedPassword = await bcrypt.hash(password, salt)
+            const newData = req.body
+            if(Object.prototype.hasOwnProperty.call(req.body, '_password')){
+                const salt = await bcrypt.genSalt(10)
+                newData._password = await bcrypt.hash(newData._password, salt)
+            }
             const filter = { _codUser: codUser }
-            const update = { $set: { _password: hashedPassword } }
-            const updatedUser = await updateUserData(filter, update)
-            res.status(200).json(updatedUser)
-        } else{
-            res.status(401).json({message: 'User not found'})
-        }
-    }else{
-        res.status(401).json({message:'Invalid user data'})
-    }
-})
-
-/**
- * Updates user username by user code.
- *
- * This function updates the username of a user based on the provided user code.
- * It extracts the user code from the request parameters.
- * If the user code is provided, it retrieves the user data using findUserByCode function.
- * If the user is found, it updates the user's username in the database and returns the updated user data with HTTP status code 200 (OK).
- * If the user is not found, it returns an error message with HTTP status code 401 (Unauthorized).
- * If the user code is invalid or missing, it returns an error message with HTTP status code 401 (Unauthorized).
- *
- * @param {Object} req - The request object containing user data.
- * @param {Object} res - The response object used to send the response.
- * @returns {Object} The HTTP response containing either the updated user data or an error message in JSON format.
- */
-const updateUsernameByCode = asyncHandler(async (req, res) => {
-    const codUser = req.params.codUser
-    if(codUser){
-        const user = await findUserByCode(codUser)
-        if(user){
-            const username = req.body.username
-            const filter = { _codUser: codUser }
-            const update = { $set: { _username: username } }
+            const update = { $set: newData }
             const updatedUser = await updateUserData(filter, update)
             res.status(200).json(updatedUser)
         } else{
@@ -246,6 +214,5 @@ module.exports = {loginUser,
     getMe,
     getAll,
     getUserByCode,
-    updateUserPasswordByCode,
-    updateUsernameByCode,
+    updateUserDataByCode,
     deleteUserByCode}
