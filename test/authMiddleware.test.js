@@ -14,6 +14,7 @@ const mockResponse = () => {
 const req = {
     method: "",
     url: "",
+    params: "",
     headers: {},
     user: null
 };
@@ -32,6 +33,7 @@ describe("verifyToken middleware", () => {
         await collections.users.insertMany(userData)
         req.method = ""
         req.url = ""
+        req.params = ""
     })
 
     afterAll(async () => {
@@ -52,6 +54,38 @@ describe("verifyToken middleware", () => {
         await verifyToken (req, res, mockNext)
         expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({message: "Invalid token"})
+    })
+
+    it("should return 401 if an operational user try to delete another user", async() => {
+        req.method = "DELETE"
+        const res = mockResponse()
+        const token = jwt.sign({ id:'000898'}, process.env.JWT_SECRET);
+        req.headers = { authorization: `Bearer ${token}` }
+        await verifyToken (req, res, mockNext)
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({message: "Only admin users can perform this action"})
+    })
+
+    it("should return 401 if an operational user try to access to all users created", async() => {
+        req.url = "/all"
+        req.method = "GET"
+        const res = mockResponse()
+        const token = jwt.sign({ id:'000898'}, process.env.JWT_SECRET);
+        req.headers = { authorization: `Bearer ${token}` }
+        await verifyToken (req, res, mockNext)
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({message: "Only admin users can perform this action"})
+    })
+
+    it("should return 401 if an operational user try to modified data about another user", async() => {
+        req.params = "000897"
+        req.method = "PUT"
+        const res = mockResponse()
+        const token = jwt.sign({ id:'000898'}, process.env.JWT_SECRET);
+        req.headers = { authorization: `Bearer ${token}` }
+        await verifyToken (req, res, mockNext)
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({message: "Only admin users can perform this action"})
     })
 
     it("should call next if token is valid", async() => {
