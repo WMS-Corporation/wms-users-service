@@ -163,7 +163,8 @@ const updateUserDataByCode = asyncHandler(async (req, res) => {
         "_username",
         "_password",
         "_name",
-        "_surname"
+        "_surname",
+        "_type"
     ];
 
     let foundValidField = false;

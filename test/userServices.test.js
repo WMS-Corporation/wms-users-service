@@ -224,7 +224,7 @@ describe('User services testing', () => {
             params: {
                 codUser: "000897"
             }, body:{
-                _type: "Operational"
+                _codUser: "87463536"
             }
         };
         await updateUserDataByCode(req, res)
