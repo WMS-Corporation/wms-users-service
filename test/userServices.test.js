@@ -3,7 +3,7 @@ const {loginUser, registerUser, getAll, getUserByCode, updateUserDataByCode, del
 const {connectDB, collections, closeDB} = require("../src/config/dbConnection")
 const path = require("path")
 const fs = require("fs")
-
+const {describe, beforeEach, it, expect, beforeAll, afterAll} = require('@jest/globals')
 dotenv.config()
 const password = process.env.PASSWORD_USER_TEST
 const mockResponse = () => {
@@ -216,6 +216,20 @@ describe('User services testing', () => {
         await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({message: "Invalid user data"})
+    })
+
+    it('it should return 401 if try to updating field that is not specified for the user or field that is not possible to updated', async () => {
+        const res = mockResponse()
+        const req = {
+            params: {
+                codUser: "000897"
+            }, body:{
+                _type: "Operational"
+            }
+        };
+        await updateUserDataByCode(req, res)
+        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.json).toHaveBeenCalledWith({message: "User does not contain any of the specified fields or you can not update them."})
     })
 
     it('it should return 200 and the user updated with a new username', async () => {

@@ -158,18 +158,39 @@ const getUserByCode = asyncHandler(async (req, res) => {
  */
 const updateUserDataByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
+
+    const validFields = [
+        "_username",
+        "_password",
+        "_name",
+        "_surname"
+    ];
+
+    let foundValidField = false;
+
+    for (const field of validFields) {
+        if (Object.prototype.hasOwnProperty.call(req.body, field)) {
+            foundValidField = true
+            break;
+        }
+    }
+
     if(codUser){
         const user = await findUserByCode(codUser)
         if(user){
-            const newData = req.body
-            if(Object.prototype.hasOwnProperty.call(req.body, '_password')){
-                const salt = await bcrypt.genSalt(10)
-                newData._password = await bcrypt.hash(newData._password, salt)
+            if(!foundValidField){
+                res.status(401).json({message: 'User does not contain any of the specified fields or you can not update them.'})
+            } else {
+                const newData = req.body
+                if(Object.prototype.hasOwnProperty.call(req.body, '_password')){
+                    const salt = await bcrypt.genSalt(10)
+                    newData._password = await bcrypt.hash(newData._password, salt)
+                }
+                const filter = { _codUser: codUser }
+                const update = { $set: newData }
+                const updatedUser = await updateUserData(filter, update)
+                res.status(200).json(updatedUser)
             }
-            const filter = { _codUser: codUser }
-            const update = { $set: newData }
-            const updatedUser = await updateUserData(filter, update)
-            res.status(200).json(updatedUser)
         } else{
             res.status(401).json({message: 'User not found'})
         }

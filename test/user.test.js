@@ -2,6 +2,7 @@ const { User } = require('../src/entities/user');
 const path = require("path");
 const fs = require("fs");
 const {createUserFromData} = require("../src/factories/userFactory");
+const {describe, it, expect, beforeAll} = require('@jest/globals')
 describe('User testing', () => {
     let user;
 
