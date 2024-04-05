@@ -16,7 +16,7 @@ let db = null;
  */
 async function connectDB(dbName) {
     try {
-        client = new MongoClient(process.env.DB_CONN_STRING);
+        client = new MongoClient("mongodb://mongodb:27017");
         await client.connect();
         db = client.db(dbName);
         const usersCollection = db.collection(process.env.USER_COLLECTION);
