@@ -21,7 +21,7 @@ env:
   COUNTER_COLLECTION: "Counter"
   JWT_SECRET: "secret_key"
   PORT: "4001"
-  
+
 jobs:
   testJest:
     runs-on: ${{ matrix.os }}
@@ -50,18 +50,7 @@ jobs:
         run: npm install
       - name: Run Tests
         run: npm test
-        env:
-          PASSWORD_USER_TEST: "bella"
-          NEW_PASSWORD_USER_TEST: "palla"
-          DB_NAME: "WMS"
-          DB_NAME_TEST_MIDDLEWARE: "WMS_TEST_MIDDLEWARE"
-          DB_NAME_TEST_REPOSITORY: "WMS_TEST_REPOSITORY"
-          DB_NAME_TEST_SERVICES: "WMS_TEST_SERVICES"
-          DB_CONN_STRING: "mongodb://127.0.0.1:27017"
-          USER_COLLECTION: "User"
-          COUNTER_COLLECTION: "Counter"
-          JWT_SECRET: "secret_key"
-          PORT: "4001"
+
       - name: Run EsLint quality check
         run: npm run eslint
 
@@ -102,6 +91,13 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     needs: testJest
+    env:
+      DB_NAME: "WMS"
+      DB_CONN_STRING: "mongodb://mongodb:27017"
+      USER_COLLECTION: "User"
+      COUNTER_COLLECTION: "Counter"
+      JWT_SECRET: "secret_key"
+      PORT: "4001"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
