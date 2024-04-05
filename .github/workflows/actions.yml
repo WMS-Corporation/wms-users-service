@@ -8,6 +8,20 @@ on:
 permissions:
   contents: write
   pull-requests: write
+
+env:
+  PASSWORD_USER_TEST: "bella"
+  NEW_PASSWORD_USER_TEST: "palla"
+  DB_NAME: "WMS"
+  DB_NAME_TEST_MIDDLEWARE: "WMS_TEST_MIDDLEWARE"
+  DB_NAME_TEST_REPOSITORY: "WMS_TEST_REPOSITORY"
+  DB_NAME_TEST_SERVICES: "WMS_TEST_SERVICES"
+  DB_CONN_STRING: "mongodb://127.0.0.1:27017"
+  USER_COLLECTION: "User"
+  COUNTER_COLLECTION: "Counter"
+  JWT_SECRET: "secret_key"
+  PORT: "4001"
+  
 jobs:
   testJest:
     runs-on: ${{ matrix.os }}
@@ -69,18 +83,7 @@ jobs:
 
       - name: Test and coverage
         run: npm run coverage
-        env:
-          PASSWORD_USER_TEST: "bella"
-          NEW_PASSWORD_USER_TEST: "palla"
-          DB_NAME: "WMS"
-          DB_NAME_TEST_MIDDLEWARE: "WMS_TEST_MIDDLEWARE"
-          DB_NAME_TEST_REPOSITORY: "WMS_TEST_REPOSITORY"
-          DB_NAME_TEST_SERVICES: "WMS_TEST_SERVICES"
-          DB_CONN_STRING: "mongodb://127.0.0.1:27017"
-          USER_COLLECTION: "User"
-          COUNTER_COLLECTION: "Counter"
-          JWT_SECRET: "secret_key"
-          PORT: "4001"
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
