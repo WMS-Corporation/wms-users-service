@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 console.log(process.env.PORT)
 const userServicePort = process.env.PORT || 4001;
 let corsOptions = {
-    origin: new RegExp(`http:\/\/localhost:${userServicePort}\/.*`),
+    origin: new RegExp(`http:\/\/wms-users:${userServicePort}\/.*`),
 };
 dotenv.config();
 const app = express();
