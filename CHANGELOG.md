@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.1](https://github.com/WMS-Corporation/wms-users-service/compare/v1.0.0...v1.0.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* Added control if counter collection exists ([c6b2d2c](https://github.com/WMS-Corporation/wms-users-service/commit/c6b2d2cbbf1e70f49c39457910991fc7bdce29b4))
+* **deps:** update dependency mongodb to v6.4.0 ([18c2690](https://github.com/WMS-Corporation/wms-users-service/commit/18c269059af07b3ac0e2c8fd2f9c020dd8dc2646))
+* Implemented body request field validation for user creation or modification ([c8b4e89](https://github.com/WMS-Corporation/wms-users-service/commit/c8b4e898a98e3163d4f664dbf0f59a3af533a318))
+* Implemented the possibility to updated the type of a user ([904b5b7](https://github.com/WMS-Corporation/wms-users-service/commit/904b5b7af4583ba6bdb9994dabe37145c1dfaccc))
+* Modified method that update the user data ([dfef51b](https://github.com/WMS-Corporation/wms-users-service/commit/dfef51b744a97a7cdf083edbec24453e3c0feeb4))
+* Modified route and method that updated user data ([e4f21eb](https://github.com/WMS-Corporation/wms-users-service/commit/e4f21eb5ba74ab88a5de3837f2a036e54e6cf9c6))
+* Modified User Unique Code Generation ([5ac0296](https://github.com/WMS-Corporation/wms-users-service/commit/5ac029619267f86e072154d8ecdb27c4522d0bf1))
+* Updated midleware, it can check if users have permissions to access the defined routes. ([64d7ed7](https://github.com/WMS-Corporation/wms-users-service/commit/64d7ed7e91e87d3071559044d9c56ba1e5210904))
+
 ## 1.0.0 (2024-03-04)
 
 
