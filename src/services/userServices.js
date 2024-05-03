@@ -17,7 +17,12 @@ const {findUserByUsername, createUser, getUsers, findUserByCode, updateUserData,
  * @param {Object} res - The response object.
  */
 const registerUser = asyncHandler(async(req, res) => {
-    const user = createUserFromData(req.body);
+    let user
+    if(verifyBodyFields(req.body, "Create")){
+        user = createUserFromData(req.body)
+    } else {
+        return res.status(401).json({ message: 'Invalid request body. Please ensure all required fields are included and in the correct format.' })
+    }
     if (!user.username || !user.password || !user.name || !user.surname) {
         return res.status(401).json({ message: 'Invalid user data' })
     }
@@ -159,39 +164,22 @@ const getUserByCode = asyncHandler(async (req, res) => {
 const updateUserDataByCode = asyncHandler(async (req, res) => {
     const codUser = req.params.codUser
 
-    const validFields = [
-        "_username",
-        "_password",
-        "_name",
-        "_surname",
-        "_type"
-    ];
-
-    let foundValidField = false;
-
-    for (const field of validFields) {
-        if (Object.prototype.hasOwnProperty.call(req.body, field)) {
-            foundValidField = true
-            break;
-        }
+    if(!verifyBodyFields(req.body, "Update")){
+        return res.status(401).json({message: 'Invalid request body. Please ensure all required fields are included and in the correct format.'})
     }
 
     if(codUser){
         const user = await findUserByCode(codUser)
         if(user){
-            if(!foundValidField){
-                res.status(401).json({message: 'User does not contain any of the specified fields or you can not update them.'})
-            } else {
-                const newData = req.body
-                if(Object.prototype.hasOwnProperty.call(req.body, '_password')){
-                    const salt = await bcrypt.genSalt(10)
-                    newData._password = await bcrypt.hash(newData._password, salt)
-                }
-                const filter = { _codUser: codUser }
-                const update = { $set: newData }
-                const updatedUser = await updateUserData(filter, update)
-                res.status(200).json(updatedUser)
+            const newData = req.body
+            if(Object.prototype.hasOwnProperty.call(req.body, '_password')){
+                const salt = await bcrypt.genSalt(10)
+                newData._password = await bcrypt.hash(newData._password, salt)
             }
+            const filter = { _codUser: codUser }
+            const update = { $set: newData }
+            const updatedUser = await updateUserData(filter, update)
+            res.status(200).json(updatedUser)
         } else{
             res.status(401).json({message: 'User not found'})
         }
@@ -229,6 +217,46 @@ const deleteUserByCode = asyncHandler(async (req, res) => {
         res.status(401).json({message:'Invalid user data'})
     }
 })
+
+/**
+ * Function to verify the fields in the request body based on the operation type.
+ *
+ * This function checks whether the fields in the request body are valid for the specified operation type,
+ * such as "Create" or "Update".
+ * It validates the presence and correctness of required fields depending on the operation.
+ * Returns true if all fields are valid; otherwise, returns false.
+ *
+ * @param {Object} body - The request body to be verified.
+ * @param {string} operation - The type of operation (e.g., "Create" or "Update").
+ * @return {boolean} - Indicates whether the fields in the body are valid for the specified operation.
+ **/
+
+const verifyBodyFields = (body, operation) => {
+    const userValidFields = [
+        "_username",
+        "_password",
+        "_name",
+        "_surname",
+        "_type"
+    ];
+
+    const validateFields = (fields, body, requireAll) => {
+        const presentFields = Object.keys(body);
+        const missingFields = fields.filter(field => !presentFields.includes(field));
+
+        if (requireAll) {
+            return missingFields.length === 0 && presentFields.length === fields.length;
+        } else {
+            return presentFields.every(field => fields.includes(field));
+        }
+    };
+
+    if (operation === "Create") {
+        return validateFields(userValidFields, body, true)
+    } else {
+        return validateFields(userValidFields, body)
+    }
+}
 
 module.exports = {loginUser,
     generateToken,

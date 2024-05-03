@@ -229,7 +229,7 @@ describe('User services testing', () => {
         };
         await updateUserDataByCode(req, res)
         expect(res.status).toHaveBeenCalledWith(401)
-        expect(res.json).toHaveBeenCalledWith({message: "User does not contain any of the specified fields or you can not update them."})
+        expect(res.json).toHaveBeenCalledWith({message: "Invalid request body. Please ensure all required fields are included and in the correct format."})
     })
 
     it('it should return 200 and the user updated with a new username', async () => {

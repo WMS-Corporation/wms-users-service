@@ -1,8 +1,10 @@
 name: Run Tests PR
+
 on:
   pull_request:
     branches:
       - main
+
 jobs:
   testJest:
     runs-on: ${{ matrix.os }}
@@ -10,8 +12,8 @@ jobs:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
         node-version: [ 18, 20 ]
-        mongodb-version: ['6.0']
-      timeout-minutes: 3
+        mongodb-version: [ '6.0' ]
+    timeout-minutes: 3
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,5 +47,6 @@ jobs:
           COUNTER_COLLECTION: "Counter"
           JWT_SECRET: "secret_key"
           PORT: "4001"
+
       - name: Run EsLint quality check
         run: npm run eslint
