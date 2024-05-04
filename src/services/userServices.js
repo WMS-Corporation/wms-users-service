@@ -23,8 +23,12 @@ const registerUser = asyncHandler(async(req, res) => {
     } else {
         return res.status(401).json({ message: 'Invalid request body. Please ensure all required fields are included and in the correct format.' })
     }
-    if (!user.username || !user.password || !user.name || !user.surname) {
+    if (!user.username || !user.password || !user.name || !user.surname || !user.type) {
         return res.status(401).json({ message: 'Invalid user data' })
+    }
+    let users = await getUsers()
+    if(users.length === 0){
+        user.type = "Admin"
     }
 
     const userExists = await findUserByUsername(user.username);
