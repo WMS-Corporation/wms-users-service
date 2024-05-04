@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/WMS-Corporation/wms-users-service/compare/v1.0.1...v2.0.0) (2024-05-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Updated registration route
+
+### Bug Fixes
+
+* Updated registration route ([caeed92](https://github.com/WMS-Corporation/wms-users-service/commit/caeed92be6ea70bcdbac6f04cd76d5f1ef750d65))
+
 ## [1.0.1](https://github.com/WMS-Corporation/wms-users-service/compare/v1.0.0...v1.0.1) (2024-05-03)
 
 
