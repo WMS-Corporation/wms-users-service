@@ -12,7 +12,7 @@ let db = null;
  *
  * This function establishes a connection to the MongoDB database using the connection string
  * specified in the environment variables. It initializes the MongoDB client, connects to the
- * database, and sets up the users collection for further database operations.
+
  */
 async function connectDB(dbName) {
     try {
